@@ -219,11 +219,18 @@ python3 scripts/wx_cli_to_report.py \
   --raw-output raw_wx_history.json
 ```
 
+群聊身份在内部按稳定 ID 分组，日报和 `sender` 字段优先展示群昵称；没有群昵称时
+展示原始微信昵称。对于只返回
+错误 `sender` 字符串的旧版 wx-cli，脚本会从 `~/.wx-cli/cache` 的本地解密缓存中
+恢复真实发送者并完成名称映射；稳定 ID 不会出现在日报页面。如果新版字段
+和本地缓存都无法提供稳定身份，脚本才会停止生成，避免把消息串到错误成员名下。
+只有明确接受旧数据风险时才添加 `--allow-unstable-senders`。
+
 产物：
 
 - `stats.json`：消息数、活跃成员、话唠榜、词云等统计数据
 - `simplified_chat.txt`：压缩后的聊天文本，给 AI 生成日报内容用
-- `raw_wx_history.json`：原始 wx-cli 输出，便于排查
+- `raw_wx_history.json`：校正并清理内部身份字段后的聊天 JSON，便于排查
 
 ### 2. 如果只能用本地 wechat-cli 包
 

@@ -228,7 +228,11 @@ def main():
         template_name = 'report_template.html'
     
     # Setup Jinja2
-    env = Environment(loader=FileSystemLoader(template_dir))
+    env = Environment(
+        loader=FileSystemLoader(template_dir),
+        trim_blocks=True,
+        lstrip_blocks=True,
+    )
     template = env.get_template(template_name)
     
     # Merge AI-generated traits into top_talkers
