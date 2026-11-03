@@ -322,6 +322,10 @@ class SenderIdentityTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0)
         self.assertEqual(run_mock.call_count, 3)
         self.assertEqual(sleep_mock.call_count, 2)
+        self.assertEqual(
+            [call.args[0] for call in sleep_mock.call_args_list],
+            [2.0, 4.0],
+        )
 
 
 if __name__ == "__main__":

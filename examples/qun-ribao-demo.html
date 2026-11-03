@@ -3,1529 +3,734 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dont哥 对谈群 · 群日报 · 2026-04-30</title>
+  <title>Dont哥 对谈群 · 今日群聊日报 · 2026-04-30</title>
   <style>
     :root {
-      --paper: #f3f5ef;
-      --paper-2: #e7eee8;
-      --ink: #20231f;
-      --muted: #687067;
-      --line: #d8ded2;
-      --card: #ffffff;
-      --card-strong: #f3f7ef;
-      --rust: #b45f2a;
-      --rust-deep: #7a351f;
-      --green: #287a5b;
-      --blue: #415f8f;
-      --gold: #d39b35;
-      --violet: #8b5a86;
-      --shadow: 0 22px 60px rgba(79, 48, 22, 0.14);
-      --radius: 8px;
-      --font-body: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      --font-mono: "SFMono-Regular", "Cascadia Mono", "Menlo", monospace;
+      --sky: #dff4ff;
+      --paper: #fffdf7;
+      --ink: #23324a;
+      --muted: #69758a;
+      --blue: #2e89bd;
+      --blue-deep: #185a88;
+      --blue-soft: #eaf8ff;
+      --yellow: #ffd75a;
+      --yellow-soft: #fff8cf;
+      --orange: #f4a33b;
+      --pink: #f39ab7;
+      --pink-soft: #fff0f5;
+      --mint: #a7dfcf;
+      --mint-soft: #edf9f4;
+      --purple: #9a8bd7;
+      --line: #7bc1de;
+      --white: #ffffff;
+      --shadow: 4px 5px 0 rgba(38, 104, 142, 0.14);
+      --round: 18px;
+      --round-sm: 12px;
+      --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+      --cute: "Kaiti SC", "STKaiti", "KaiTi", var(--sans);
+      --mono: "SFMono-Regular", "Menlo", monospace;
     }
 
     * { box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
-      background: var(--paper);
-    }
+    html { scroll-behavior: smooth; background: var(--sky); }
 
     body {
       margin: 0;
-      min-height: 100vh;
       color: var(--ink);
-      font-family: var(--font-body);
+      font-family: var(--sans);
       background:
-        radial-gradient(circle at 16% 8%, rgba(117, 161, 122, 0.22), transparent 28%),
-        linear-gradient(135deg, #f8f9f4 0%, #e7efe8 52%, #f4efe7 100%);
+        radial-gradient(circle at 10% 4%, rgba(255,255,255,.95) 0 48px, transparent 49px),
+        radial-gradient(circle at 18% 5%, rgba(255,255,255,.75) 0 28px, transparent 29px),
+        radial-gradient(circle at 90% 2%, rgba(255,255,255,.85) 0 60px, transparent 61px),
+        linear-gradient(180deg, #ccefff 0, #eefaff 350px, #fffdf7 1000px);
     }
 
     body::before {
       content: "";
       position: fixed;
       inset: 0;
+      z-index: -1;
       pointer-events: none;
-      opacity: 0.18;
+      opacity: .18;
       background-image:
-        linear-gradient(rgba(85, 59, 34, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(85, 59, 34, 0.08) 1px, transparent 1px);
-      background-size: 28px 28px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent 90%);
+        radial-gradient(#3185b3 1px, transparent 1px),
+        radial-gradient(#f0a142 1px, transparent 1px);
+      background-position: 0 0, 10px 10px;
+      background-size: 20px 20px;
     }
 
     a { color: inherit; }
+    button { font: inherit; }
 
-    .shell {
-      display: grid;
-      grid-template-columns: 280px minmax(0, 1fr);
-      gap: 28px;
-      width: min(1180px, calc(100vw - 40px));
-      margin: 0 auto;
-      padding: 28px 0 48px;
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 24px;
-      height: calc(100vh - 48px);
-      overflow: auto;
-      padding: 20px;
-      border: 1px solid rgba(122, 53, 31, 0.16);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.86);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-    }
-
-    .brand {
-      padding: 8px 6px 18px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 18px;
-    }
-
-    .brand-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--rust);
-      font-size: 12px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-
-    .brand h1 {
-      margin: 10px 0 6px;
-      font-size: 25px;
-      line-height: 1.12;
-      letter-spacing: 0;
-    }
-
-    .brand-date {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .side-section {
-      margin: 20px 0;
-    }
-
-    .side-title {
-      margin: 0 0 10px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .nav-link,
-    .member-chip,
-    .topic-mini {
-      width: 100%;
-      border: 0;
-      text-align: left;
-      font: inherit;
-      cursor: pointer;
-      text-decoration: none;
-      color: var(--ink);
-    }
-
-    .nav-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 9px 10px;
-      border-radius: 6px;
-      color: var(--muted);
-    }
-
-    .nav-link:hover { background: rgba(40, 122, 91, 0.08); color: var(--green); }
-
-    .member-chip {
-      display: grid;
-      grid-template-columns: 30px minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 9px;
-      padding: 9px;
-      margin-bottom: 7px;
-      border: 1px solid transparent;
-      border-radius: 8px;
-      background: rgba(248, 250, 246, 0.72);
-    }
-
-    .member-chip:hover,
-    .member-chip.active {
-      background: #eef6ef;
-      border-color: rgba(40, 122, 91, 0.22);
-      color: var(--green);
-    }
-
-    .mini-avatar,
-    .avatar {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .poster {
+      width: min(1160px, calc(100vw - 28px));
+      margin: 16px auto 30px;
+      padding: 12px;
       overflow: hidden;
-      border-radius: 50%;
-      color: white;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--rust), var(--gold));
-    }
-
-    .mini-avatar { width: 30px; height: 30px; font-size: 12px; }
-    .avatar { width: 42px; height: 42px; flex: 0 0 auto; }
-    .avatar img, .mini-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    .member-name {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 14px;
-    }
-
-    .member-count {
-      color: var(--muted);
-      font-size: 12px;
-      font-family: var(--font-mono);
-    }
-
-    .topic-mini {
-      display: block;
-      padding: 11px 12px;
-      margin-bottom: 8px;
-      border-radius: 8px;
-      background: rgba(246, 249, 243, 0.86);
-      border: 1px solid rgba(216, 222, 210, 0.9);
-    }
-
-    .topic-mini strong {
-      display: block;
-      margin-bottom: 4px;
-      color: var(--rust-deep);
-      font-size: 14px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .topic-mini span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .main {
-      min-width: 0;
+      border: 3px solid var(--blue-deep);
+      border-radius: 28px;
+      background: rgba(255,255,255,.76);
+      box-shadow: 0 18px 60px rgba(30, 94, 130, .18);
     }
 
     .hero {
       position: relative;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr) 190px;
+      align-items: center;
+      min-height: 230px;
       overflow: hidden;
-      min-height: 360px;
-      padding: 34px;
-      border-radius: var(--radius);
-      color: #fff9ed;
+      border: 2px solid var(--line);
+      border-radius: 22px;
       background:
-        linear-gradient(135deg, rgba(31, 43, 36, 0.95), rgba(54, 73, 84, 0.92), rgba(116, 55, 35, 0.88)),
-        repeating-linear-gradient(45deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 10px);
+        linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.82)),
+        repeating-linear-gradient(90deg, transparent 0 64px, rgba(62,137,181,.08) 65px 66px),
+        var(--sky);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      left: 210px;
+      right: 180px;
+      bottom: 18px;
+      height: 80px;
+      opacity: .27;
+      background:
+        linear-gradient(90deg, transparent 0 3%, #4d93b5 3% 5%, transparent 5% 9%, #4d93b5 9% 12%, transparent 12% 18%, #4d93b5 18% 19%, transparent 19% 27%, #4d93b5 27% 31%, transparent 31% 41%, #4d93b5 41% 43%, transparent 43% 52%, #4d93b5 52% 58%, transparent 58% 69%, #4d93b5 69% 71%, transparent 71% 82%, #4d93b5 82% 87%, transparent 87%);
+      clip-path: polygon(0 100%,0 70%,5% 70%,5% 42%,10% 42%,10% 60%,15% 60%,15% 30%,20% 30%,20% 70%,27% 70%,27% 52%,32% 52%,32% 65%,40% 65%,40% 18%,46% 18%,46% 62%,53% 62%,53% 40%,59% 40%,59% 70%,67% 70%,67% 50%,73% 50%,73% 25%,78% 25%,78% 68%,86% 68%,86% 43%,92% 43%,92% 73%,100% 73%,100% 100%);
+    }
+
+    .hero-art {
+      position: relative;
+      align-self: stretch;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      isolation: isolate;
+    }
+
+    .hero-art::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 190px;
+      height: 190px;
+      left: 10px;
+      bottom: -40px;
+      border: 3px solid var(--blue);
+      border-radius: 50%;
+      background: var(--yellow-soft);
+    }
+
+    .mascot {
+      position: relative;
+      margin-bottom: 14px;
+      filter: drop-shadow(3px 5px 0 rgba(36,95,130,.18));
+    }
+
+    .mascot-face {
+      position: relative;
+      width: 108px;
+      height: 108px;
+      margin: 0 auto -5px;
+      border: 3px solid var(--ink);
+      border-radius: 48% 48% 45% 45%;
+      background: #ffe8d2;
+    }
+
+    .mascot-face::before {
+      content: "";
+      position: absolute;
+      inset: -14px -10px 48px;
+      z-index: -1;
+      border: 3px solid var(--ink);
+      border-radius: 55% 55% 32% 32%;
+      background: #37415d;
+    }
+
+    .mascot-eye {
+      position: absolute;
+      top: 46px;
+      width: 17px;
+      height: 25px;
+      border: 3px solid var(--ink);
+      border-radius: 50%;
+      background: linear-gradient(#fff 0 25%, #3a8ec1 26% 72%, #172c49 73%);
+    }
+
+    .mascot-eye.left { left: 24px; }
+    .mascot-eye.right { right: 24px; }
+
+    .mascot-mouth {
+      position: absolute;
+      left: 45px;
+      top: 78px;
+      width: 18px;
+      height: 10px;
+      border-bottom: 3px solid #c95767;
+      border-radius: 50%;
+    }
+
+    .laptop {
+      position: relative;
+      width: 150px;
+      height: 76px;
+      border: 3px solid var(--ink);
+      border-radius: 10px 10px 5px 5px;
+      background: #5d7090;
+    }
+
+    .laptop::after { content: "🐱"; position: absolute; left: 58px; top: 18px; font-size: 28px; }
+
+    .speech {
+      position: absolute;
+      top: 16px;
+      right: -8px;
+      max-width: 105px;
+      padding: 9px 10px;
+      transform: rotate(-5deg);
+      border: 2px solid var(--blue-deep);
+      border-radius: 50%;
+      background: white;
+      color: var(--blue-deep);
+      font-family: var(--cute);
+      font-size: 14px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      align-self: center;
+      padding: 24px 26px;
+      text-align: center;
+    }
+
+    .group-name {
+      margin: 0;
+      color: var(--blue-deep);
+      font-family: var(--cute);
+      font-size: clamp(30px, 4vw, 52px);
+      font-weight: 900;
+      line-height: 1.1;
+      text-shadow: 2px 2px 0 white;
+    }
+
+    .daily-title {
+      margin: 8px 0 10px;
+      color: var(--orange);
+      font-family: var(--cute);
+      font-size: clamp(38px, 5.3vw, 68px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .04em;
+      -webkit-text-stroke: 1px #fff3c8;
+      text-shadow: 3px 3px 0 rgba(208,107,41,.13);
+    }
+
+    .hero-meta {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 22px;
+      padding: 8px 18px;
+      border-top: 2px dashed #80bbd6;
+      color: var(--blue-deep);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .hero-count {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      align-self: stretch;
+      padding: 24px 16px;
+    }
+
+    .count-bubble {
+      width: 145px;
+      padding: 18px 10px 16px;
+      transform: rotate(3deg);
+      border: 3px solid var(--pink);
+      border-radius: 50% 46% 50% 48%;
+      background: white;
+      color: #d94d73;
+      text-align: center;
       box-shadow: var(--shadow);
     }
 
-    .hero::after {
-      content: "日报";
-      position: absolute;
-      right: -18px;
-      bottom: -34px;
-      font-size: 170px;
-      font-weight: 900;
-      color: rgba(255,255,255,0.08);
-      line-height: 1;
-    }
+    .count-bubble strong { display: block; font-family: var(--cute); font-size: 42px; line-height: 1; }
+    .count-bubble span { font-weight: 900; }
+    .cat-sticker { margin-top: 12px; font-size: 70px; line-height: 1; filter: drop-shadow(2px 3px 0 rgba(31,84,120,.14)); }
 
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 680px;
-    }
-
-    .hero-kicker {
-      display: inline-flex;
-      gap: 8px;
+    .toolbar {
+      position: sticky;
+      top: 8px;
+      z-index: 30;
+      display: flex;
       align-items: center;
-      margin-bottom: 20px;
-      color: #ffe0b2;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      gap: 8px;
+      margin: 10px 0;
+      padding: 8px 10px;
+      overflow-x: auto;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 5px 18px rgba(33,96,135,.12);
+      scrollbar-width: none;
     }
 
-    .hero h2 {
-      margin: 0;
-      font-size: clamp(40px, 6vw, 76px);
-      line-height: 0.95;
-      letter-spacing: 0;
+    .toolbar::-webkit-scrollbar { display: none; }
+    .toolbar-label { flex: 0 0 auto; color: var(--blue-deep); font-size: 12px; font-weight: 900; }
+
+    .member-chip {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 7px;
+      min-height: 34px;
+      padding: 4px 11px 4px 5px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      white-space: nowrap;
     }
 
-    .hero-subtitle {
-      margin: 22px 0 0;
-      max-width: 560px;
-      color: rgba(255, 249, 237, 0.78);
-      font-size: 18px;
-      line-height: 1.7;
+    .member-chip.active { color: white; background: var(--blue); }
+    .member-chip b { font-size: 11px; }
+    .member-chip small { font-family: var(--mono); opacity: .7; }
+
+    .mini-avatar, .avatar {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 2px solid white;
+      border-radius: 50%;
+      color: white;
+      background: var(--pink);
+      font-weight: 900;
+      box-shadow: 0 0 0 1px var(--blue);
     }
 
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 32px;
-      max-width: 640px;
-    }
-
-    .metric {
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: var(--radius);
-      background: rgba(255,255,255,0.1);
-    }
-
-    .metric strong {
-      display: block;
-      font-size: 28px;
-      line-height: 1;
-      font-family: var(--font-mono);
-    }
-
-    .metric span {
-      display: block;
-      margin-top: 8px;
-      color: rgba(255,249,237,0.68);
-      font-size: 12px;
-    }
+    .mini-avatar { width: 24px; height: 24px; font-size: 9px; }
+    .avatar { width: 42px; height: 42px; font-size: 13px; }
+    .avatar img, .mini-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .filter-banner {
       display: none;
       align-items: center;
-      gap: 12px;
-      margin: 18px 0 0;
-      padding: 12px 16px;
-      border-radius: var(--radius);
-      background: #eef6ef;
-      border: 1px solid rgba(40, 122, 91, 0.24);
-      color: var(--green);
+      justify-content: space-between;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      border: 2px solid var(--blue);
+      border-radius: 12px;
+      background: var(--blue-soft);
+      color: var(--blue-deep);
+      font-size: 12px;
+      font-weight: 800;
     }
 
     .filter-banner.show { display: flex; }
+    .clear-filter { border: 0; border-radius: 999px; padding: 6px 12px; color: white; background: var(--blue); cursor: pointer; }
 
-    .clear-filter {
-      border: 0;
-      border-radius: 6px;
-      background: var(--green);
-      color: white;
-      padding: 6px 12px;
-      cursor: pointer;
-      font-weight: 700;
+    .panel {
+      position: relative;
+      border: 2px solid var(--blue);
+      border-radius: var(--round);
+      background: var(--paper);
+      box-shadow: var(--shadow);
     }
 
-    .section {
-      margin-top: 28px;
-    }
+    .panel.yellow { border-color: #e7b63d; background: linear-gradient(145deg, white, var(--yellow-soft)); }
+    .panel.pink { border-color: var(--pink); background: linear-gradient(145deg, white, var(--pink-soft)); }
+    .panel.mint { border-color: #65bda5; background: linear-gradient(145deg, white, var(--mint-soft)); }
 
-    .section-heading {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 16px;
-      margin: 0 0 14px;
-    }
-
-    .section-heading h3 {
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: 0;
-    }
-
-    .section-heading p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .event-card,
-    .grid-card {
-      border: 1px solid rgba(122, 53, 31, 0.14);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 14px 40px rgba(79, 48, 22, 0.08);
-    }
-
-    .event-card {
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-
-    .event-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 22px 24px 16px;
-      border-bottom: 1px dashed var(--line);
-    }
-
-    .event-head h4 {
-      margin: 0;
-      color: var(--rust-deep);
+    .panel-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: -1px 0 0 -1px;
+      padding: 8px 16px 8px 12px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      border-radius: 16px 0 14px 0;
+      color: var(--blue-deep);
+      background: white;
+      font-family: var(--cute);
       font-size: 21px;
-      line-height: 1.32;
+      font-weight: 900;
     }
 
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 6px;
+    .panel-title .number { color: var(--orange); }
+    .panel-body { padding: 15px; }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: .86fr 1.38fr .82fr;
+      gap: 10px;
+      align-items: stretch;
     }
+
+    .stat-list { display: grid; gap: 8px; }
+    .stat-line { display: grid; grid-template-columns: 30px 1fr auto; align-items: center; gap: 8px; padding-bottom: 7px; border-bottom: 1px dashed #cbd7df; }
+    .stat-line:last-child { border-bottom: 0; }
+    .stat-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--blue-soft); font-size: 16px; }
+    .stat-label { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .stat-value { font-size: 14px; font-weight: 900; text-align: right; }
+
+    .hot-title { margin: 14px 0 8px; font-family: var(--cute); font-size: 18px; font-weight: 900; }
+    .hot-list { margin: 0; padding: 0; list-style: none; }
+    .hot-list li { position: relative; padding: 4px 0 4px 15px; font-size: 12px; line-height: 1.5; }
+    .hot-list li::before { content: "✦"; position: absolute; left: 0; color: var(--orange); }
+
+    .timeline { position: relative; display: grid; gap: 10px; padding-left: 18px; }
+    .timeline::before { content: ""; position: absolute; left: 5px; top: 10px; bottom: 10px; width: 3px; border-radius: 3px; background: var(--line); }
+    .timeline-item { position: relative; display: grid; grid-template-columns: 58px 1fr; gap: 8px; }
+    .timeline-item::before { content: ""; position: absolute; left: -18px; top: 8px; width: 11px; height: 11px; border: 2px solid var(--blue); border-radius: 50%; background: white; }
+    .time-tag { align-self: start; padding: 3px 7px; border-radius: 7px; color: var(--blue-deep); background: var(--blue-soft); font-size: 11px; font-weight: 900; text-align: center; }
+    .timeline-copy h3 { margin: 0 0 3px; font-size: 14px; line-height: 1.35; }
+    .timeline-copy p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    .star-card { position: relative; text-align: center; }
+    .crown { color: var(--orange); font-size: 38px; line-height: 1; }
+    .star-card .avatar { width: 76px; height: 76px; margin: 4px auto 8px; font-size: 24px; border-width: 4px; }
+    .star-name { margin: 4px 0; font-family: var(--cute); font-size: 24px; font-weight: 900; }
+    .star-count { color: var(--blue-deep); font-family: var(--mono); font-size: 13px; font-weight: 900; }
+    .star-copy { margin: 10px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .tag-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-top: 10px; }
 
     .tag {
       display: inline-flex;
-      align-items: center;
-      min-height: 24px;
-      padding: 3px 9px;
-      border-radius: 6px;
-      color: var(--blue);
-      background: rgba(65, 95, 143, 0.1);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .event-body {
-      padding: 20px 24px 24px;
-    }
-
-    .summary {
-      margin: 0;
-      color: #514337;
-      font-size: 15px;
-      line-height: 1.85;
-    }
-
-    .bubbles {
-      display: flex;
-      flex-direction: column;
-      gap: 13px;
-    }
-
-    .bubble-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 11px;
-    }
-
-    .bubble-row.is-right {
-      flex-direction: row-reverse;
-    }
-
-    .bubble {
-      position: relative;
-      max-width: min(680px, 78%);
-      padding: 12px 14px;
-      border-radius: var(--radius);
-      background: #ffffff;
-      border: 1px solid rgba(222, 205, 183, 0.82);
-      color: #352a21;
-      line-height: 1.72;
-    }
-
-    .bubble-row.is-right .bubble {
-      background: #e5f4e9;
-      border-color: rgba(40, 122, 91, 0.18);
-    }
-
-    .bubble-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .bubble-row.is-right .bubble-meta {
-      justify-content: flex-end;
-    }
-
-    .bubble-name {
-      color: var(--rust);
+      padding: 3px 8px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      color: var(--blue-deep);
+      background: white;
+      font-size: 10px;
       font-weight: 800;
     }
 
-    .bubble-row.is-right .bubble-name { color: var(--green); }
+    .section-block { margin-top: 10px; }
 
-    .highlight {
-      margin-top: 18px;
-      padding: 14px 16px;
-      border-radius: var(--radius);
-      background: #f2f6eb;
-      color: var(--rust-deep);
-      font-weight: 800;
-      line-height: 1.55;
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .grid-card {
-      padding: 20px;
-    }
-
-    .card-label {
-      display: inline-flex;
-      margin-bottom: 12px;
-      padding: 4px 9px;
-      border-radius: 6px;
-      color: var(--green);
-      background: rgba(40, 122, 91, 0.1);
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .grid-card h4 {
-      margin: 0 0 8px;
-      color: var(--ink);
-      font-size: 18px;
-      line-height: 1.35;
-    }
-
-    .grid-card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 14px;
-    }
-
-    .points {
-      margin: 14px 0 0;
-      padding-left: 18px;
-      color: #514337;
-      line-height: 1.7;
-      font-size: 14px;
-    }
-
-    .qa-card {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      padding: 20px;
-      border-radius: var(--radius);
-      background: #ffffff;
-      border: 1px solid rgba(122, 53, 31, 0.14);
-      margin-bottom: 14px;
-    }
-
-    .qa-block {
-      padding: 16px;
-      border-radius: var(--radius);
-      background: #f5f4ee;
-    }
-
-    .qa-block.answer {
-      background: #e7f2ef;
-    }
-
-    .qa-role {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .qa-block h4 {
-      margin: 8px 0 8px;
-      font-size: 17px;
-      line-height: 1.5;
-    }
-
-    .qa-block p {
-      margin: 0;
-      color: #514337;
-      line-height: 1.72;
-      font-size: 14px;
-    }
-
-    .rank-grid {
+    .achievement-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+      gap: 8px;
     }
 
-    .rank-card {
-      padding: 18px;
-      border-radius: var(--radius);
-      background: #ffffff;
-      border: 1px solid rgba(122, 53, 31, 0.14);
-    }
-
-    .rank-top {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .rank-index {
-      color: var(--gold);
-      font-family: var(--font-mono);
-      font-size: 22px;
-      font-weight: 900;
-    }
-
-    .rank-name {
-      min-width: 0;
-      font-weight: 900;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .rank-count {
-      color: var(--muted);
-      font-size: 13px;
-      font-family: var(--font-mono);
-    }
-
-    .pill-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
-    }
-
-    .pill {
-      padding: 4px 8px;
-      border-radius: 6px;
-      background: rgba(180, 95, 42, 0.1);
-      color: var(--rust-deep);
-      font-size: 12px;
-    }
-
-    .word-cloud {
+    .achievement {
       position: relative;
-      height: 310px;
+      min-height: 170px;
+      padding: 12px;
       overflow: hidden;
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.78);
-      border: 1px solid rgba(122, 53, 31, 0.14);
+      border: 1.5px solid #e9a9bd;
+      border-radius: 13px;
+      background: rgba(255,255,255,.78);
     }
 
-    .word {
-      position: absolute;
-      transform: translate(-50%, -50%) rotate(var(--rotate));
-      font-weight: 900;
-      white-space: nowrap;
-      opacity: 0.9;
-    }
+    .achievement:nth-child(3n+2) { border-color: #e9c154; background: rgba(255,251,222,.86); }
+    .achievement:nth-child(3n) { border-color: #7bc7b3; background: rgba(237,250,246,.88); }
+    .achievement-icon { float: right; margin: -5px -2px 6px 8px; font-size: 38px; }
+    .achievement-type { color: #cc5b7c; font-size: 10px; font-weight: 900; letter-spacing: .06em; }
+    .achievement h3 { margin: 5px 0 7px; font-size: 15px; line-height: 1.35; }
+    .achievement p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .achievement ul { clear: both; margin: 8px 0 0; padding-left: 16px; color: var(--ink); font-size: 10px; line-height: 1.5; }
+    .achievement-meta { clear: both; margin-top: 9px; color: var(--blue-deep); font-size: 10px; font-weight: 800; }
+
+    .split-grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: 10px; }
+
+    .dialogue-list { display: grid; gap: 8px; }
+    .dialogue-card { overflow: hidden; border: 1.5px solid var(--line); border-radius: 13px; background: rgba(255,255,255,.82); }
+    .dialogue-head { display: flex; justify-content: space-between; gap: 12px; padding: 8px 11px; border-bottom: 1px dashed var(--line); background: var(--blue-soft); }
+    .dialogue-head h3 { margin: 0; font-size: 14px; }
+    .dialogue-head span { color: var(--muted); font-size: 9px; }
+    .message-list { display: grid; gap: 7px; padding: 9px; }
+    .message { display: grid; grid-template-columns: 34px 1fr; gap: 8px; align-items: start; }
+    .message .avatar { width: 32px; height: 32px; font-size: 10px; }
+    .message-bubble { min-width: 0; padding: 7px 9px; border-radius: 3px 11px 11px 11px; background: #f5f6f5; }
+    .message-meta { display: flex; align-items: baseline; gap: 7px; margin-bottom: 2px; }
+    .message-name { color: var(--blue-deep); font-size: 10px; font-weight: 900; }
+    .message-time { color: #9aa2ae; font-size: 8px; }
+    .message-content { font-size: 11px; line-height: 1.55; overflow-wrap: anywhere; }
+    .more-note { margin: -2px 9px 8px 51px; color: var(--muted); font-size: 9px; text-align: right; }
+    .highlight { margin: 0 9px 9px 51px; padding: 7px 9px; border-left: 4px solid var(--yellow); border-radius: 7px; background: var(--yellow-soft); font-size: 10px; font-weight: 800; line-height: 1.55; }
+
+    .qa-list { display: grid; gap: 8px; }
+    .qa-card { display: grid; grid-template-columns: 30px 1fr; gap: 7px; padding: 9px; border: 1.5px solid #e8bd54; border-radius: 12px; background: rgba(255,255,255,.84); }
+    .qa-mark { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; color: white; background: var(--orange); font-family: var(--cute); font-size: 18px; font-weight: 900; }
+    .qa-question { margin: 0 0 5px; font-size: 12px; font-weight: 900; line-height: 1.5; }
+    .qa-answer { margin: 0; padding-top: 5px; border-top: 1px dashed #ddd0a4; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .qa-by { color: var(--blue-deep); font-weight: 900; }
+
+    .people-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .person-card { padding: 10px; border: 1.5px solid var(--blue); border-radius: 12px; background: white; text-align: center; }
+    .person-card:first-child { border-color: var(--orange); background: var(--yellow-soft); }
+    .person-rank { color: var(--orange); font-family: var(--cute); font-size: 23px; font-weight: 900; }
+    .person-card .avatar { width: 46px; height: 46px; margin: 4px auto; }
+    .person-name { overflow: hidden; font-size: 11px; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+    .person-count { color: var(--muted); font-size: 9px; }
+
+    .night-owl { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; margin-top: 9px; padding: 10px; border: 1.5px solid var(--purple); border-radius: 12px; background: #f3efff; }
+    .night-icon { font-size: 28px; }
+    .night-owl h4 { margin: 0; font-size: 12px; }
+    .night-owl p { margin: 3px 0 0; color: var(--muted); font-size: 9px; }
+    .night-time { color: var(--purple); font-family: var(--mono); font-size: 16px; font-weight: 900; }
+
+    .word-cloud { position: relative; height: 270px; overflow: hidden; border: 2px dashed var(--line); border-radius: 14px; background: rgba(255,255,255,.76); }
+    .word { position: absolute; transform: translate(-50%,-50%) rotate(var(--rotate)); font-family: var(--cute); font-weight: 900; white-space: nowrap; opacity: .9; }
 
     .footer {
-      margin: 28px 0 0;
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      padding: 12px 16px;
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      background: white;
       color: var(--muted);
-      text-align: center;
-      font-size: 12px;
+      font-size: 10px;
+      line-height: 1.6;
     }
 
-    .hidden-by-filter {
-      display: none !important;
+    .footer-cat { font-size: 46px; }
+    .footer strong { display: block; color: var(--blue-deep); font-family: var(--cute); font-size: 16px; }
+    .footer-sign { color: var(--blue-deep); font-family: var(--cute); font-size: 16px; font-weight: 900; text-align: right; }
+
+    .hidden-by-filter { display: none !important; }
+    body.is-capturing .toolbar { position: relative; top: 0; }
+
+    @media (max-width: 900px) {
+      .poster { width: min(100vw - 16px, 700px); margin-top: 8px; padding: 8px; }
+      .hero { grid-template-columns: 150px 1fr; }
+      .hero-art { min-height: 210px; }
+      .hero-count { grid-column: 1 / -1; flex-direction: row; gap: 20px; min-height: auto; padding: 10px; border-top: 2px dashed var(--line); }
+      .count-bubble { width: auto; min-width: 160px; border-radius: 18px; transform: none; padding: 10px; }
+      .cat-sticker { margin: 0; font-size: 50px; }
+      .top-grid, .split-grid { grid-template-columns: 1fr; }
+      .achievement-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    body.is-capturing .sidebar {
-      position: static;
-      height: auto;
-    }
-
-    @media (max-width: 880px) {
-      .shell {
-        display: block;
-        width: min(100vw - 24px, 640px);
-        padding: 12px 0 36px;
-      }
-
-      .sidebar {
-        position: relative;
-        top: 0;
-        height: auto;
-        margin-bottom: 16px;
-      }
-
-      .hero { padding: 26px; min-height: 320px; }
-      .hero::after { font-size: 110px; }
-      .metrics, .card-grid, .rank-grid, .qa-card { grid-template-columns: 1fr; }
-      .bubble { max-width: 84%; }
-      .section-heading { display: block; }
-      .section-heading p { margin-top: 6px; }
+    @media (max-width: 560px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-art { display: none; }
+      .hero-copy { padding: 26px 14px; }
+      .hero-count { grid-column: 1; }
+      .achievement-grid, .people-grid { grid-template-columns: 1fr; }
+      .panel-title { font-size: 18px; }
+      .timeline-item { grid-template-columns: 52px 1fr; }
+      .footer { grid-template-columns: auto 1fr; }
+      .footer-sign { display: none; }
     }
 
     @media print {
-      body { background: #fff; }
-      .shell { width: 1120px; }
-      .sidebar { position: sticky; }
+      body { background: white; }
+      .poster { width: 1160px; margin: 0 auto; box-shadow: none; }
+      .toolbar { position: relative; top: 0; }
     }
   </style>
 </head>
-
 <body>
-  
 
-  
-  
-  
-  
-  
 
-  <div class="shell">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-kicker">WeChat Daily</div>
-        <h1>Dont哥 对谈群日报</h1>
-        <div class="brand-date">2026-04-30 · 09:10 至 23:58</div>
+  <div class="poster">
+    <header class="hero">
+      <div class="hero-art">
+        <div class="mascot">
+          <div class="speech">摸鱼也要认真复盘～</div>
+          <div class="mascot-face"><i class="mascot-eye left"></i><i class="mascot-eye right"></i><i class="mascot-mouth"></i></div>
+          <div class="laptop"></div>
+        </div>
+      </div>
+      <div class="hero-copy">
+        <h1 class="group-name">Dont哥 对谈群</h1>
+        <div class="daily-title">今日群聊日报</div>
+        <div class="hero-meta"><span>📅 2026-04-30</span><span>📍 群聊现场</span><span>🕘 09:10 至 23:58</span></div>
+      </div>
+      <div class="hero-count">
+        <div class="count-bubble"><strong>1268</strong><span>条消息！</span></div>
+        <div class="cat-sticker">🐱</div>
+      </div>
+    </header>
+
+    <nav class="toolbar" aria-label="按成员筛选日报内容">
+      <span class="toolbar-label">🔎 按成员看</span>
+      <button class="member-chip active" data-member="__all__"><span class="mini-avatar">全</span><b>全部</b><small>1268</small></button>
+<button class="member-chip" data-member="Dont哥"><span class="mini-avatar">D</span><b>Dont哥</b><small>198</small></button><button class="member-chip" data-member="小魏"><span class="mini-avatar">小</span><b>小魏</b><small>164</small></button><button class="member-chip" data-member="HOORAY"><span class="mini-avatar">H</span><b>HOORAY</b><small>137</small></button>    </nav>
+    <div class="filter-banner" id="filterBanner"><span id="filterText">正在查看成员相关内容</span><button class="clear-filter" data-member="__all__">显示全部</button></div>
+
+    <main>
+      <div class="top-grid">
+        <section class="panel yellow">
+          <h2 class="panel-title"><span class="number">一、</span>今日群聊数据</h2>
+          <div class="panel-body">
+            <div class="stat-list">
+              <div class="stat-line"><span class="stat-icon">🕘</span><span class="stat-label">起止时间</span><strong class="stat-value">09:10 至 23:58</strong></div>
+              <div class="stat-line"><span class="stat-icon">👥</span><span class="stat-label">参与人数</span><strong class="stat-value">约 42 人</strong></div>
+              <div class="stat-line"><span class="stat-icon">💬</span><span class="stat-label">消息总数</span><strong class="stat-value">1268 条</strong></div>
+            </div>
+            <div class="hot-title">🔥 热门话题</div>
+            <ul class="hot-list"><li>把微信聊天记录塞进 Obsidian：从想法到路线图</li><li>WeFlow 还是 CipherTalk：今天的技术路线大会</li><li>日报 UI 不能再像临时拼图了</li><li>仓库要能直接交给别人用</li></ul>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2 class="panel-title"><span class="number">二、</span>今日群聊概要</h2>
+          <div class="panel-body">
+            <div class="timeline">
+              <article class="timeline-item" id="topic-1">
+                <span class="time-tag">知识库</span>
+                <div class="timeline-copy"><h3>把微信聊天记录塞进 Obsidian：从想法到路线图</h3><p>大家把目标拆清楚了：不是简单备份聊天，而是要在 Obsidian 里能翻资料、看文件、追溯上下文，最后形成可搜索、可复盘的本地知识库。</p></div>
+              </article>
+              <article class="timeline-item" id="topic-2">
+                <span class="time-tag">工具选型</span>
+                <div class="timeline-copy"><h3>WeFlow 还是 CipherTalk：今天的技术路线大会</h3><p>群里围绕本地导出、解密、API、年报能力聊了一轮，结论是 WeFlow 更像一站式入口，CipherTalk 更像底层思路和解密参考。</p></div>
+              </article>
+              <article class="timeline-item" id="topic-3">
+                <span class="time-tag">界面改版</span>
+                <div class="timeline-copy"><h3>日报 UI 不能再像临时拼图了</h3><p>原来的卡片堆叠太像模板，大家更喜欢带目录、聊天气泡、事件时间线的页面。日报应该像可回看的聊天现场，而不是一张冷冰冰的统计海报。</p></div>
+              </article>
+              <article class="timeline-item" id="topic-4">
+                <span class="time-tag">交付</span>
+                <div class="timeline-copy"><h3>仓库要能直接交给别人用</h3><p>讨论最后落到文档：仓库名、安装方式、配置说明、示例截图和参考来源都要写清楚，不能只丢一堆脚本让后来的人猜。</p></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel yellow">
+          <h2 class="panel-title">👑 今日群星</h2>
+          <div class="panel-body star-card">
+            <div class="crown">♛</div>
+            <span class="avatar">D</span>
+            <div class="star-name">Dont哥</div>
+            <div class="star-count">约 198 条消息</div>
+            <p class="star-copy">今日聊天主力，稳定贡献话题、接梗和现场气氛。</p>
+<div class="tag-row"><span class="tag">路线图导演</span><span class="tag">边界感很强</span><span class="tag">喜欢把坑提前标出来</span></div>          </div>
+        </section>
       </div>
 
-      <div class="side-section">
-        <p class="side-title">跳转</p>
-        <a class="nav-link" href="#story"><span>今日剧情</span><span>→</span></a>
-        <a class="nav-link" href="#dialogues"><span>聊天现场</span><span>→</span></a>
-        <a class="nav-link" href="#resources"><span>资料收纳</span><span>→</span></a>
-        <a class="nav-link" href="#people"><span>成员观察</span><span>→</span></a>
+      <section class="panel pink section-block" id="resources">
+        <h2 class="panel-title"><span class="number">三、</span>今日趣味成就 · 值得收下</h2>
+        <div class="panel-body achievement-grid">
+          <article class="achievement filterable" data-members="HOORAY">
+            <span class="achievement-icon">🎁</span>
+            <span class="achievement-type">参考项目</span>
+            <h3>WeFlow：微信数据导出与本地 API 方向</h3><p>适合做本地微信资料导出、解密和后续 API 化的参考路线。</p>
+<ul><li>更偏完整产品路线</li><li>适合接 Obsidian/日报/检索</li><li>后续可做适配器</li></ul>            <div class="achievement-meta">HOORAY · 10:42</div>
+          </article>
+          <article class="achievement filterable" data-members="Dont哥">
+            <span class="achievement-icon">💡</span>
+            <span class="achievement-type">参考项目</span>
+            <h3>CipherTalk：微信数据库解密思路参考</h3><p>更适合作为底层解密与数据读取的思路来源。</p>
+<ul><li>关注解密链路</li><li>可作为 WeFlow 之前的基础参考</li><li>需要注意本地数据安全</li></ul>            <div class="achievement-meta">Dont哥 · 10:47</div>
+          </article>
+          <article class="achievement filterable" data-members="小魏">
+            <span class="achievement-icon">📚</span>
+            <span class="achievement-type">设计参考</span>
+            <h3>群日报网页样式参考</h3><p>左侧目录、右侧聊天事件流、气泡复盘的形式更接近理想效果。</p>
+<ul><li>适合长内容阅读</li><li>截图后能直接分享</li><li>比单纯卡片堆叠更有现场感</li></ul>            <div class="achievement-meta">小魏 · 14:18</div>
+          </article>
+          <article class="achievement filterable" data-members="小魏">
+            <span class="achievement-icon">🏆</span>
+            <span class="achievement-type">高提醒</span>
+            <h3>仓库介绍必须带截图</h3><p>GitHub 仓库的介绍没有截图都不行，至少要有 HTML 预览和长图截图，不然用户不知道装完长什么样。</p>
+            <div class="achievement-meta">小魏 · 15:22</div>
+          </article>
+          <article class="achievement filterable" data-members="Dont哥">
+            <span class="achievement-icon">📌</span>
+            <span class="achievement-type">中提醒</span>
+            <h3>数据来源要写成多路线</h3><p>不要只写 WeFlow，一定把手工导出、WeFlow、本地解密这几条路线都写清楚。</p>
+            <div class="achievement-meta">Dont哥 · 16:05</div>
+          </article>
+        </div>
+      </section>
+
+      <div class="split-grid section-block">
+        <section class="panel" id="dialogues">
+          <h2 class="panel-title"><span class="number">四、</span>群聊骚话精选</h2>
+          <div class="panel-body dialogue-list">
+            <article class="dialogue-card filterable" data-members="小魏|Dont哥|HOORAY|小魏">
+              <header class="dialogue-head"><h3>日报到底应该长什么样</h3><span>现场回放 01</span></header>
+              <div class="message-list">
+                <div class="message"><span class="avatar">小</span><div class="message-bubble"><div class="message-meta"><span class="message-name">小魏</span><span class="message-time">13:58</span></div><div class="message-content">这个 UI 太丑了，像临时把几张卡片粘一起。</div></div></div>
+                <div class="message"><span class="avatar">D</span><div class="message-bubble"><div class="message-meta"><span class="message-name">Dont哥</span><span class="message-time">13:59</span></div><div class="message-content">你要的是能回看聊天现场的日报，不是 PPT 第 38 页。</div></div></div>
+                <div class="message"><span class="avatar">H</span><div class="message-bubble"><div class="message-meta"><span class="message-name">HOORAY</span><span class="message-time">14:00</span></div><div class="message-content">左边目录，右边事件流，中间夹聊天气泡，这个方向可以。</div></div></div>
+              </div>
+<div class="more-note">另有 1 条上下文，详见完整日报</div><div class="highlight">💬 今日金句：日报不是统计图，是把一整天的群聊重新剪成一条能读的故事线。</div>            </article>
+            <article class="dialogue-card filterable" data-members="HOORAY|小魏|Dont哥">
+              <header class="dialogue-head"><h3>WeFlow 能不能用上</h3><span>现场回放 02</span></header>
+              <div class="message-list">
+                <div class="message"><span class="avatar">H</span><div class="message-bubble"><div class="message-meta"><span class="message-name">HOORAY</span><span class="message-time">10:35</span></div><div class="message-content">WeFlow 在导出、解密、年报和本地 API 上都做得更大。</div></div></div>
+                <div class="message"><span class="avatar">小</span><div class="message-bubble"><div class="message-meta"><span class="message-name">小魏</span><span class="message-time">10:36</span></div><div class="message-content">那是不是只能采取 WeFlow 的方式？</div></div></div>
+                <div class="message"><span class="avatar">D</span><div class="message-bubble"><div class="message-meta"><span class="message-name">Dont哥</span><span class="message-time">10:37</span></div><div class="message-content">不是。WeFlow 可以作为优先入口，但仓库应该同时支持 JSON/文本输入，这样以后换数据源也不崩。</div></div></div>
+              </div>
+<div class="highlight">💬 今日金句：数据源可以换，日报结构不能跟着塌。</div>            </article>
+            <article class="dialogue-card filterable" data-members="小魏|Dont哥|小魏|HOORAY">
+              <header class="dialogue-head"><h3>仓库交付标准</h3><span>现场回放 03</span></header>
+              <div class="message-list">
+                <div class="message"><span class="avatar">小</span><div class="message-bubble"><div class="message-meta"><span class="message-name">小魏</span><span class="message-time">18:21</span></div><div class="message-content">你要给仓库命名，写详细介绍，还要告诉我具体怎么用。</div></div></div>
+                <div class="message"><span class="avatar">D</span><div class="message-bubble"><div class="message-meta"><span class="message-name">Dont哥</span><span class="message-time">18:22</span></div><div class="message-content">README 写安装、数据来源、生成命令、预览截图和参考项目。</div></div></div>
+                <div class="message"><span class="avatar">小</span><div class="message-bubble"><div class="message-meta"><span class="message-name">小魏</span><span class="message-time">18:24</span></div><div class="message-content">配上一些截图啊大哥。</div></div></div>
+              </div>
+<div class="more-note">另有 1 条上下文，详见完整日报</div><div class="highlight">💬 今日金句：截图不是装饰，是项目可信度的一部分。</div>            </article>
+          </div>
+        </section>
+
+        <div>
+          <section class="panel yellow" id="qa">
+            <h2 class="panel-title"><span class="number">五、</span>群友知识问答</h2>
+            <div class="panel-body qa-list">
+              <article class="qa-card filterable" data-members="小魏|Dont哥">
+                <span class="qa-mark">Q</span>
+                <div><p class="qa-question"><span class="qa-by">小魏：</span>装到 Obsidian 之后，是不是就能直接看到微信聊天记录、文件和资料？</p><p class="qa-answer"><span class="qa-by">Dont哥：</span>不是自动魔法。Obsidian 端负责展示和检索，微信数据需要先通过手工导出、WeFlow 或本地解密管线整理成 Markdown/JSON/附件目录，再导入 vault。</p></div>
+              </article>
+              <article class="qa-card filterable" data-members="HOORAY|小魏">
+                <span class="qa-mark">Q</span>
+                <div><p class="qa-question"><span class="qa-by">HOORAY：</span>日报长图和 HTML 页面都要保留吗？</p><p class="qa-answer"><span class="qa-by">小魏：</span>都要。HTML 适合托管和交互筛选，PNG 适合发群和归档，两个场景不冲突。</p></div>
+              </article>
+              <article class="qa-card filterable" data-members="Dont哥|HOORAY">
+                <span class="qa-mark">Q</span>
+                <div><p class="qa-question"><span class="qa-by">Dont哥：</span>AI 内容应该生成哪些字段？</p><p class="qa-answer"><span class="qa-by">HOORAY：</span>至少要有 topics、resources、important_messages、dialogues、qas、talker_profiles。聊天气泡要靠 dialogues，成员筛选要靠名称对齐。</p></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel mint section-block" id="people">
+            <h2 class="panel-title"><span class="number">六、</span>群友闪耀时刻</h2>
+            <div class="panel-body">
+              <div class="people-grid">
+                <article class="person-card filterable" data-members="Dont哥"><div class="person-rank">#1</div><span class="avatar">D</span><div class="person-name">Dont哥</div><div class="person-count">198 条</div></article>
+                <article class="person-card filterable" data-members="小魏"><div class="person-rank">#2</div><span class="avatar">小</span><div class="person-name">小魏</div><div class="person-count">164 条</div></article>
+                <article class="person-card filterable" data-members="HOORAY"><div class="person-rank">#3</div><span class="avatar">H</span><div class="person-name">HOORAY</div><div class="person-count">137 条</div></article>
+              </div>
+<article class="night-owl filterable" data-members="小魏"><span class="night-icon">🌙</span><div><h4>熬夜收尾官 · 小魏</h4><p>先别睡，把 README 的截图也补上，不然仓库看起来像半成品。</p></div><span class="night-time">23:58</span></article>            </div>
+          </section>
+
+          <section class="panel section-block" id="words">
+            <h2 class="panel-title">☁️ 今日群聊关键词</h2>
+            <div class="panel-body"><div class="word-cloud"><span class="word" style="left: 25%; top: 72px; color: #7a351f; font-size: 38px; --rotate: -6deg;" title="88">Obsidian</span><span class="word" style="left: 56%; top: 92px; color: #287a5b; font-size: 34px; --rotate: 5deg;" title="74">微信资料</span><span class="word" style="left: 72%; top: 152px; color: #b45f2a; font-size: 32px; --rotate: -3deg;" title="65">日报</span><span class="word" style="left: 31%; top: 178px; color: #415f8f; font-size: 28px; --rotate: 8deg;" title="48">WeFlow</span><span class="word" style="left: 61%; top: 230px; color: #d39b35; font-size: 26px; --rotate: -8deg;" title="44">截图</span><span class="word" style="left: 18%; top: 248px; color: #8b5a86; font-size: 24px; --rotate: 4deg;" title="39">GitHub</span><span class="word" style="left: 82%; top: 62px; color: #287a5b; font-size: 22px; --rotate: 7deg;" title="31">配置</span><span class="word" style="left: 46%; top: 286px; color: #415f8f; font-size: 21px; --rotate: -4deg;" title="28">聊天记录</span></div></div>
+          </section>
+        </div>
       </div>
-
-      
-      <div class="side-section">
-        <p class="side-title">按成员过滤</p>
-        <button class="member-chip active" data-member="__all__">
-          <span class="mini-avatar">全</span>
-          <span class="member-name">全部消息</span>
-          <span class="member-count">1268</span>
-        </button>
-        
-        <button class="member-chip" data-member="Dont哥">
-          <span class="mini-avatar">
-      
-        D
-      
-    </span>
-          <span class="member-name">Dont哥</span>
-          <span class="member-count">198</span>
-        </button>
-        
-        <button class="member-chip" data-member="小魏">
-          <span class="mini-avatar">
-      
-        小
-      
-    </span>
-          <span class="member-name">小魏</span>
-          <span class="member-count">164</span>
-        </button>
-        
-        <button class="member-chip" data-member="HOORAY">
-          <span class="mini-avatar">
-      
-        H
-      
-    </span>
-          <span class="member-name">HOORAY</span>
-          <span class="member-count">137</span>
-        </button>
-        
-      </div>
-      
-
-      
-      <div class="side-section">
-        <p class="side-title">今日关键词</p>
-        
-        <a class="topic-mini" href="#topic-1">
-          <strong>把微信聊天记录塞进 Obsidian：从想法到路线图</strong>
-          <span>知识库 · 96</span>
-        </a>
-        
-        <a class="topic-mini" href="#topic-2">
-          <strong>WeFlow 还是 CipherTalk：今天的技术路线大会</strong>
-          <span>工具选型 · 73</span>
-        </a>
-        
-        <a class="topic-mini" href="#topic-3">
-          <strong>日报 UI 不能再像临时拼图了</strong>
-          <span>界面改版 · 64</span>
-        </a>
-        
-        <a class="topic-mini" href="#topic-4">
-          <strong>仓库要能直接交给别人用</strong>
-          <span>交付 · 42</span>
-        </a>
-        
-      </div>
-      
-    </aside>
-
-    <main class="main">
-      <section class="hero">
-        <div class="hero-content">
-          <div class="hero-kicker">群聊日报 · 2026-04-30</div>
-          <h2>Dont哥 对谈群</h2>
-          <p class="hero-subtitle">今天群里聊了什么、谁在输出、哪些资料值得捡起来，这份日报把消息流整理成可以回看的事件现场。</p>
-          <div class="metrics">
-            <div class="metric">
-              <strong>1268</strong>
-              <span>总消息数</span>
-            </div>
-            <div class="metric">
-              <strong>42</strong>
-              <span>活跃成员</span>
-            </div>
-            <div class="metric">
-              <strong>09:10 至 23:58</strong>
-              <span>统计周期</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div class="filter-banner" id="filterBanner">
-        <span id="filterText">正在查看某位成员相关内容</span>
-        <button class="clear-filter" data-member="__all__">显示全部</button>
-      </div>
-
-      
-      <section class="section" id="story">
-        <div class="section-heading">
-          <h3>今日剧情</h3>
-          <p>把松散聊天整理成几段可回看的事件。</p>
-        </div>
-        
-        <article class="event-card" id="topic-1">
-          <header class="event-head">
-            <h4>把微信聊天记录塞进 Obsidian：从想法到路线图</h4>
-            <div class="tags">
-              <span class="tag">知识库</span>
-              
-              <span class="tag">Obsidian</span>
-              
-              <span class="tag">微信</span>
-              
-              <span class="tag">知识库</span>
-              
-              <span class="tag">检索</span>
-              
-            </div>
-          </header>
-          <div class="event-body">
-            <p class="summary">大家把目标拆清楚了：不是简单备份聊天，而是要在 Obsidian 里能翻资料、看文件、追溯上下文，最后形成可搜索、可复盘的本地知识库。</p>
-          </div>
-        </article>
-        
-        <article class="event-card" id="topic-2">
-          <header class="event-head">
-            <h4>WeFlow 还是 CipherTalk：今天的技术路线大会</h4>
-            <div class="tags">
-              <span class="tag">工具选型</span>
-              
-              <span class="tag">WeFlow</span>
-              
-              <span class="tag">CipherTalk</span>
-              
-              <span class="tag">导出</span>
-              
-              <span class="tag">API</span>
-              
-            </div>
-          </header>
-          <div class="event-body">
-            <p class="summary">群里围绕本地导出、解密、API、年报能力聊了一轮，结论是 WeFlow 更像一站式入口，CipherTalk 更像底层思路和解密参考。</p>
-          </div>
-        </article>
-        
-        <article class="event-card" id="topic-3">
-          <header class="event-head">
-            <h4>日报 UI 不能再像临时拼图了</h4>
-            <div class="tags">
-              <span class="tag">界面改版</span>
-              
-              <span class="tag">UI</span>
-              
-              <span class="tag">日报</span>
-              
-              <span class="tag">聊天气泡</span>
-              
-              <span class="tag">截图</span>
-              
-            </div>
-          </header>
-          <div class="event-body">
-            <p class="summary">原来的卡片堆叠太像模板，大家更喜欢带目录、聊天气泡、事件时间线的页面。日报应该像可回看的聊天现场，而不是一张冷冰冰的统计海报。</p>
-          </div>
-        </article>
-        
-        <article class="event-card" id="topic-4">
-          <header class="event-head">
-            <h4>仓库要能直接交给别人用</h4>
-            <div class="tags">
-              <span class="tag">交付</span>
-              
-              <span class="tag">README</span>
-              
-              <span class="tag">GitHub</span>
-              
-              <span class="tag">Skill</span>
-              
-              <span class="tag">配置</span>
-              
-            </div>
-          </header>
-          <div class="event-body">
-            <p class="summary">讨论最后落到文档：仓库名、安装方式、配置说明、示例截图和参考来源都要写清楚，不能只丢一堆脚本让后来的人猜。</p>
-          </div>
-        </article>
-        
-      </section>
-      
-
-      
-      <section class="section" id="dialogues">
-        <div class="section-heading">
-          <h3>聊天现场</h3>
-          <p>用气泡还原当天最值得回看的对话。</p>
-        </div>
-        
-        
-        <article class="event-card filterable" data-members="小魏|Dont哥|HOORAY|小魏">
-          <header class="event-head">
-            <h4>日报到底应该长什么样</h4>
-            <div class="tags">
-              
-              <span class="tag">小魏</span>
-              
-              <span class="tag">Dont哥</span>
-              
-              <span class="tag">HOORAY</span>
-              
-              <span class="tag">小魏</span>
-              
-            </div>
-          </header>
-          <div class="event-body">
-            <div class="bubbles">
-              
-              <div class="bubble-row ">
-                <span class="avatar">
-      
-        小
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">小魏</span>
-                    <span>13:58</span>
-                  </div>
-                  <div>这个 UI 太丑了，像临时把几张卡片粘一起。</div>
-                </div>
-              </div>
-              
-              <div class="bubble-row is-right">
-                <span class="avatar">
-      
-        D
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">Dont哥</span>
-                    <span>13:59</span>
-                  </div>
-                  <div>你要的是能回看聊天现场的日报，不是 PPT 第 38 页。</div>
-                </div>
-              </div>
-              
-              <div class="bubble-row ">
-                <span class="avatar">
-      
-        H
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">HOORAY</span>
-                    <span>14:00</span>
-                  </div>
-                  <div>左边目录，右边事件流，中间夹聊天气泡，这个方向可以。</div>
-                </div>
-              </div>
-              
-              <div class="bubble-row is-right">
-                <span class="avatar">
-      
-        小
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">小魏</span>
-                    <span>14:02</span>
-                  </div>
-                  <div>对，我希望一打开就知道群里今天发生了什么。</div>
-                </div>
-              </div>
-              
-            </div>
-            
-            <div class="highlight">金句：日报不是统计图，是把一整天的群聊重新剪成一条能读的故事线。</div>
-            
-          </div>
-        </article>
-        
-        
-        <article class="event-card filterable" data-members="HOORAY|小魏|Dont哥">
-          <header class="event-head">
-            <h4>WeFlow 能不能用上</h4>
-            <div class="tags">
-              
-              <span class="tag">HOORAY</span>
-              
-              <span class="tag">小魏</span>
-              
-              <span class="tag">Dont哥</span>
-              
-            </div>
-          </header>
-          <div class="event-body">
-            <div class="bubbles">
-              
-              <div class="bubble-row ">
-                <span class="avatar">
-      
-        H
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">HOORAY</span>
-                    <span>10:35</span>
-                  </div>
-                  <div>WeFlow 在导出、解密、年报和本地 API 上都做得更大。</div>
-                </div>
-              </div>
-              
-              <div class="bubble-row is-right">
-                <span class="avatar">
-      
-        小
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">小魏</span>
-                    <span>10:36</span>
-                  </div>
-                  <div>那是不是只能采取 WeFlow 的方式？</div>
-                </div>
-              </div>
-              
-              <div class="bubble-row ">
-                <span class="avatar">
-      
-        D
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">Dont哥</span>
-                    <span>10:37</span>
-                  </div>
-                  <div>不是。WeFlow 可以作为优先入口，但仓库应该同时支持 JSON/文本输入，这样以后换数据源也不崩。</div>
-                </div>
-              </div>
-              
-            </div>
-            
-            <div class="highlight">金句：数据源可以换，日报结构不能跟着塌。</div>
-            
-          </div>
-        </article>
-        
-        
-        <article class="event-card filterable" data-members="小魏|Dont哥|小魏|HOORAY">
-          <header class="event-head">
-            <h4>仓库交付标准</h4>
-            <div class="tags">
-              
-              <span class="tag">小魏</span>
-              
-              <span class="tag">Dont哥</span>
-              
-              <span class="tag">小魏</span>
-              
-              <span class="tag">HOORAY</span>
-              
-            </div>
-          </header>
-          <div class="event-body">
-            <div class="bubbles">
-              
-              <div class="bubble-row ">
-                <span class="avatar">
-      
-        小
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">小魏</span>
-                    <span>18:21</span>
-                  </div>
-                  <div>你要给仓库命名，写详细介绍，还要告诉我具体怎么用。</div>
-                </div>
-              </div>
-              
-              <div class="bubble-row is-right">
-                <span class="avatar">
-      
-        D
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">Dont哥</span>
-                    <span>18:22</span>
-                  </div>
-                  <div>README 写安装、数据来源、生成命令、预览截图和参考项目。</div>
-                </div>
-              </div>
-              
-              <div class="bubble-row ">
-                <span class="avatar">
-      
-        小
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">小魏</span>
-                    <span>18:24</span>
-                  </div>
-                  <div>配上一些截图啊大哥。</div>
-                </div>
-              </div>
-              
-              <div class="bubble-row is-right">
-                <span class="avatar">
-      
-        H
-      
-    </span>
-                <div class="bubble">
-                  <div class="bubble-meta">
-                    <span class="bubble-name">HOORAY</span>
-                    <span>18:25</span>
-                  </div>
-                  <div>截图是 README 的脸面。没有截图，项目会显得像还没睡醒。</div>
-                </div>
-              </div>
-              
-            </div>
-            
-            <div class="highlight">金句：截图不是装饰，是项目可信度的一部分。</div>
-            
-          </div>
-        </article>
-        
-      </section>
-      
-
-      
-      <section class="section" id="resources">
-        <div class="section-heading">
-          <h3>资料收纳</h3>
-          <p>链接、经验、教程、避坑和重要信息统一捡起来。</p>
-        </div>
-        <div class="card-grid">
-          
-          <article class="grid-card filterable" data-members="HOORAY">
-            <span class="card-label">参考项目</span>
-            <h4>WeFlow：微信数据导出与本地 API 方向</h4>
-            <p>适合做本地微信资料导出、解密和后续 API 化的参考路线。</p>
-            <p style="margin-top: 10px;">分享者：<strong>HOORAY</strong> · 10:42</p>
-            
-            <ul class="points">
-              
-              <li>更偏完整产品路线</li>
-              
-              <li>适合接 Obsidian/日报/检索</li>
-              
-              <li>后续可做适配器</li>
-              
-            </ul>
-            
-            
-            <p style="margin-top: 12px;"><a href="https://github.com/hicccc77/WeFlow">打开链接 →</a></p>
-            
-          </article>
-          
-          <article class="grid-card filterable" data-members="Dont哥">
-            <span class="card-label">参考项目</span>
-            <h4>CipherTalk：微信数据库解密思路参考</h4>
-            <p>更适合作为底层解密与数据读取的思路来源。</p>
-            <p style="margin-top: 10px;">分享者：<strong>Dont哥</strong> · 10:47</p>
-            
-            <ul class="points">
-              
-              <li>关注解密链路</li>
-              
-              <li>可作为 WeFlow 之前的基础参考</li>
-              
-              <li>需要注意本地数据安全</li>
-              
-            </ul>
-            
-            
-          </article>
-          
-          <article class="grid-card filterable" data-members="小魏">
-            <span class="card-label">设计参考</span>
-            <h4>群日报网页样式参考</h4>
-            <p>左侧目录、右侧聊天事件流、气泡复盘的形式更接近理想效果。</p>
-            <p style="margin-top: 10px;">分享者：<strong>小魏</strong> · 14:18</p>
-            
-            <ul class="points">
-              
-              <li>适合长内容阅读</li>
-              
-              <li>截图后能直接分享</li>
-              
-              <li>比单纯卡片堆叠更有现场感</li>
-              
-            </ul>
-            
-            
-            <p style="margin-top: 12px;"><a href="https://simonlin000.github.io/qun-riba-20260430/">打开链接 →</a></p>
-            
-          </article>
-          
-
-          
-          <article class="grid-card filterable" data-members="小魏">
-            <span class="card-label">高</span>
-            <h4>仓库介绍必须带截图</h4>
-            <p>GitHub 仓库的介绍没有截图都不行，至少要有 HTML 预览和长图截图，不然用户不知道装完长什么样。</p>
-            <p style="margin-top: 10px;">小魏 · 15:22</p>
-          </article>
-          
-          <article class="grid-card filterable" data-members="Dont哥">
-            <span class="card-label">中</span>
-            <h4>数据来源要写成多路线</h4>
-            <p>不要只写 WeFlow，一定把手工导出、WeFlow、本地解密这几条路线都写清楚。</p>
-            <p style="margin-top: 10px;">Dont哥 · 16:05</p>
-          </article>
-          
-        </div>
-      </section>
-      
-
-      
-      <section class="section" id="qa">
-        <div class="section-heading">
-          <h3>问答收纳</h3>
-          <p>群友互助、抽象提问和最佳回答都集中到这里。</p>
-        </div>
-        
-        <article class="qa-card filterable" data-members="小魏|Dont哥">
-          <div class="qa-block">
-            <div class="qa-role">Question · 11:16</div>
-            <h4>小魏：装到 Obsidian 之后，是不是就能直接看到微信聊天记录、文件和资料？</h4>
-            
-            <div class="pill-list">
-              
-              <span class="pill">Obsidian</span>
-              
-              <span class="pill">边界</span>
-              
-            </div>
-            
-          </div>
-          <div class="qa-block answer">
-            <div class="qa-role">Answer · 11:20 · Best</div>
-            <h4>Dont哥</h4>
-            <p>不是自动魔法。Obsidian 端负责展示和检索，微信数据需要先通过手工导出、WeFlow 或本地解密管线整理成 Markdown/JSON/附件目录，再导入 vault。</p>
-          </div>
-        </article>
-        
-        <article class="qa-card filterable" data-members="HOORAY|小魏">
-          <div class="qa-block">
-            <div class="qa-role">Question · 15:08</div>
-            <h4>HOORAY：日报长图和 HTML 页面都要保留吗？</h4>
-            
-            <div class="pill-list">
-              
-              <span class="pill">输出格式</span>
-              
-              <span class="pill">分享</span>
-              
-            </div>
-            
-          </div>
-          <div class="qa-block answer">
-            <div class="qa-role">Answer · 15:10 · Best</div>
-            <h4>小魏</h4>
-            <p>都要。HTML 适合托管和交互筛选，PNG 适合发群和归档，两个场景不冲突。</p>
-          </div>
-        </article>
-        
-        <article class="qa-card filterable" data-members="Dont哥|HOORAY">
-          <div class="qa-block">
-            <div class="qa-role">Question · 16:40</div>
-            <h4>Dont哥：AI 内容应该生成哪些字段？</h4>
-            
-            <div class="pill-list">
-              
-              <span class="pill">JSON</span>
-              
-              <span class="pill">模板</span>
-              
-            </div>
-            
-          </div>
-          <div class="qa-block answer">
-            <div class="qa-role">Answer · 16:42 · Best</div>
-            <h4>HOORAY</h4>
-            <p>至少要有 topics、resources、important_messages、dialogues、qas、talker_profiles。聊天气泡要靠 dialogues，成员筛选要靠名称对齐。</p>
-          </div>
-        </article>
-        
-      </section>
-      
-
-      <section class="section" id="people">
-        <div class="section-heading">
-          <h3>成员观察</h3>
-          <p>今日输出量、常用词和深夜活跃情况。</p>
-        </div>
-        
-        <div class="rank-grid">
-          
-          <article class="rank-card filterable" data-members="Dont哥">
-            <div class="rank-top">
-              <span class="avatar">
-      
-        D
-      
-    </span>
-              <div style="min-width: 0;">
-                <div class="rank-index">#1</div>
-                <div class="rank-name">Dont哥</div>
-                <div class="rank-count">198 条消息</div>
-              </div>
-            </div>
-            
-            <div class="pill-list">
-              
-              <span class="pill">路线图导演</span>
-              
-              <span class="pill">边界感很强</span>
-              
-              <span class="pill">喜欢把坑提前标出来</span>
-              
-            </div>
-            
-            
-            <div class="pill-list">
-              
-              <span class="pill">Obsidian</span>
-              
-              <span class="pill">微信</span>
-              
-              <span class="pill">资料</span>
-              
-              <span class="pill">自动化</span>
-              
-              <span class="pill">仓库</span>
-              
-            </div>
-            
-          </article>
-          
-          <article class="rank-card filterable" data-members="小魏">
-            <div class="rank-top">
-              <span class="avatar">
-      
-        小
-      
-    </span>
-              <div style="min-width: 0;">
-                <div class="rank-index">#2</div>
-                <div class="rank-name">小魏</div>
-                <div class="rank-count">164 条消息</div>
-              </div>
-            </div>
-            
-            <div class="pill-list">
-              
-              <span class="pill">截图执念</span>
-              
-              <span class="pill">交付标准拉满</span>
-              
-              <span class="pill">一眼发现 UI 不对劲</span>
-              
-            </div>
-            
-            
-            <div class="pill-list">
-              
-              <span class="pill">日报</span>
-              
-              <span class="pill">截图</span>
-              
-              <span class="pill">UI</span>
-              
-              <span class="pill">GitHub</span>
-              
-              <span class="pill">配置</span>
-              
-            </div>
-            
-          </article>
-          
-          <article class="rank-card filterable" data-members="HOORAY">
-            <div class="rank-top">
-              <span class="avatar">
-      
-        H
-      
-    </span>
-              <div style="min-width: 0;">
-                <div class="rank-index">#3</div>
-                <div class="rank-name">HOORAY</div>
-                <div class="rank-count">137 条消息</div>
-              </div>
-            </div>
-            
-            <div class="pill-list">
-              
-              <span class="pill">工具雷达</span>
-              
-              <span class="pill">技术路线拆解员</span>
-              
-              <span class="pill">负责把抽象变具体</span>
-              
-            </div>
-            
-            
-            <div class="pill-list">
-              
-              <span class="pill">WeFlow</span>
-              
-              <span class="pill">解密</span>
-              
-              <span class="pill">导出</span>
-              
-              <span class="pill">本地</span>
-              
-              <span class="pill">接口</span>
-              
-            </div>
-            
-          </article>
-          
-        </div>
-        
-
-        
-        <article class="event-card filterable" data-members="小魏" style="margin-top: 16px;">
-          <header class="event-head">
-            <h4>熬夜收尾官：小魏</h4>
-            <div class="tags">
-              <span class="tag">最后发言 23:58</span>
-              <span class="tag">23 条深夜消息</span>
-            </div>
-          </header>
-          <div class="event-body">
-            <p class="summary">最后一条夜间消息：先别睡，把 README 的截图也补上，不然仓库看起来像半成品。</p>
-          </div>
-        </article>
-        
-      </section>
-
-      
-      <section class="section">
-        <div class="section-heading">
-          <h3>词语云</h3>
-          <p>群聊语气的现场指纹。</p>
-        </div>
-        <div class="word-cloud">
-          
-          <span
-            class="word"
-            style="left: 25%; top: 72px; color: #7a351f; font-size: 38px; --rotate: -6deg;"
-            title="88"
-          >Obsidian</span>
-          
-          <span
-            class="word"
-            style="left: 56%; top: 92px; color: #287a5b; font-size: 34px; --rotate: 5deg;"
-            title="74"
-          >微信资料</span>
-          
-          <span
-            class="word"
-            style="left: 72%; top: 152px; color: #b45f2a; font-size: 32px; --rotate: -3deg;"
-            title="65"
-          >日报</span>
-          
-          <span
-            class="word"
-            style="left: 31%; top: 178px; color: #415f8f; font-size: 28px; --rotate: 8deg;"
-            title="48"
-          >WeFlow</span>
-          
-          <span
-            class="word"
-            style="left: 61%; top: 230px; color: #d39b35; font-size: 26px; --rotate: -8deg;"
-            title="44"
-          >截图</span>
-          
-          <span
-            class="word"
-            style="left: 18%; top: 248px; color: #8b5a86; font-size: 24px; --rotate: 4deg;"
-            title="39"
-          >GitHub</span>
-          
-          <span
-            class="word"
-            style="left: 82%; top: 62px; color: #287a5b; font-size: 22px; --rotate: 7deg;"
-            title="31"
-          >配置</span>
-          
-          <span
-            class="word"
-            style="left: 46%; top: 286px; color: #415f8f; font-size: 21px; --rotate: -4deg;"
-            title="28"
-          >聊天记录</span>
-          
-        </div>
-      </section>
-      
-
-      <footer class="footer">
-        <p>Generated by WeChat Daily Report Skill · 2026-05-01 20:39:24</p>
-        <p>数据来源：Dont哥 对谈群聊天记录 · 2026-04-30 09:10 至 23:58</p>
-      </footer>
     </main>
+
+    <footer class="footer">
+      <span class="footer-cat">🐈</span>
+      <div><strong>数据备注</strong>内容由群聊记录自动整理，重点保留当天话题、资料和高光对话。<br>Dont哥 对谈群 · 2026-04-30 09:10 至 23:58</div>
+      <div class="footer-sign">摸鱼不止<br>快乐不竭！ ♡</div>
+    </footer>
   </div>
 
   <script>
@@ -1538,20 +743,18 @@
       chips.forEach(chip => chip.classList.toggle('active', chip.dataset.member === member));
       if (member === '__all__') {
         filterables.forEach(item => item.classList.remove('hidden-by-filter'));
-        banner.classList.remove('show');
+        if (banner) banner.classList.remove('show');
         return;
       }
       filterables.forEach(item => {
-        const members = (item.dataset.members || '').split('|').map(v => v.trim()).filter(Boolean);
+        const members = (item.dataset.members || '').split('|').map(value => value.trim()).filter(Boolean);
         item.classList.toggle('hidden-by-filter', !members.includes(member));
       });
-      filterText.textContent = `正在查看「${member}」相关内容`;
-      banner.classList.add('show');
+      if (filterText) filterText.textContent = `正在查看「${member}」相关内容`;
+      if (banner) banner.classList.add('show');
     }
 
-    chips.forEach(chip => {
-      chip.addEventListener('click', () => setFilter(chip.dataset.member));
-    });
+    chips.forEach(chip => chip.addEventListener('click', () => setFilter(chip.dataset.member)));
   </script>
 </body>
 </html>

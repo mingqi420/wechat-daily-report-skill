@@ -41,6 +41,13 @@ python3 scripts/wx_cli_to_report.py \
   --output-text simplified_chat.txt
 ```
 
+群聊在内部按稳定 ID 分组，对外优先展示群昵称，没有群昵称时展示原始微信昵称。
+优先使用新版 wx-cli 的
+`sender_username`；旧版输出缺少该字段时，适配器会从 `~/.wx-cli/cache` 恢复
+真实发送者并完成名称映射。新版字段和缓存都无法解析时默认停止，避免同名
+成员或昵称/username 碰撞导致串人。仅在用户明确接受风险时使用
+`--allow-unstable-senders`。
+
 产物：
 
 - `stats.json`

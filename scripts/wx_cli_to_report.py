@@ -149,7 +149,7 @@ def is_transient_history_lookup_error(result):
     return result.returncode != 0 and "找不到" in output and "消息记录" in output
 
 
-def retry_transient_history_command(cmd, attempts=3):
+def retry_transient_history_command(cmd, attempts=5):
     """Retry the short wx-daemon refresh window, but not unrelated failures."""
     result = None
     for attempt in range(attempts):
@@ -157,7 +157,10 @@ def retry_transient_history_command(cmd, attempts=3):
         if result.returncode == 0 or not is_transient_history_lookup_error(result):
             return result
         if attempt + 1 < attempts:
-            time.sleep(0.25 * (attempt + 1))
+            # A full message shard refresh normally takes 1-2 seconds and can
+            # occasionally take 6+ seconds. Short retries only hit the same
+            # decryption window again.
+            time.sleep(min(2.0 * (attempt + 1), 6.0))
     return result
 
 
