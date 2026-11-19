@@ -18,3 +18,8 @@ simplified_chat*.txt
 raw_wx_history.json
 report.html
 report.png
+
+# AI Agent 本地配置（可能含 api_key，禁止入库；模板见 config/ai_agent.example.json）
+config/ai_agent.json
+# Web 控制台运行产物
+web/output/

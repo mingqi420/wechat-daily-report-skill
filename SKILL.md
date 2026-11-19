@@ -77,6 +77,42 @@ python3 scripts/wx_cli_to_report.py \
 
 - `ai_content.json`
 
+#### 3a. 自动：调用 AI Agent 脚本（推荐）
+
+`scripts/generate_ai_content.py` 会按上面的提示词模板调用任意 OpenAI 兼容端点，直接产出合法 `ai_content.json`。
+
+配置优先级：命令行 > 环境变量 > `config/ai_agent.json` > 内置默认。首次使用复制模板并填密钥：
+
+```bash
+cp config/ai_agent.example.json config/ai_agent.json
+# 编辑 config/ai_agent.json 填写 base_url / model / api_key
+```
+
+```bash
+python3 scripts/generate_ai_content.py \
+  --stats stats.json \
+  --output ai_content.json
+
+# 临时覆盖端点与模型（DeepSeek 示例）
+python3 scripts/generate_ai_content.py \
+  --base-url https://api.deepseek.com/v1 \
+  --model deepseek-chat \
+  --api-key sk-xxxx \
+  --stats stats.json --output ai_content.json
+```
+
+说明：
+
+- 通用环境变量 `WECHAT_AI_BASE_URL` / `WECHAT_AI_MODEL` / `WECHAT_AI_API_KEY`（也兼容 `OPENAI_API_KEY`）。
+- 自动从 `stats.json` 的 `raw_text_paths` 发现聊天文本，也可用 `--chat` 指定。
+- 脚本会自动剥离代码块、补全缺失字段，并把 `talker_profiles` 对齐到 `top_talkers[].name`。
+- `config/ai_agent.json` 已加入 `.gitignore`，密钥不入库。
+- Web 控制台（`python3 web/app.py`）在「AI Agent 配置」面板里可视化编辑，并作为工作流第 2 步一键串联。
+
+#### 3b. 手动：由 Agent 直接撰写
+
+没有可用 API 时，读取 `references/ai_prompt.md`、`stats.json`、`simplified_chat*.txt`，按下述要求直接写 `ai_content.json`。
+
 要求：
 
 - 只能保存合法 JSON

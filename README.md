@@ -91,6 +91,8 @@ pip install -r requirements.txt
 
 这版重点重做了 UI，也把数据入口调整为优先使用 `jackwener/wx-cli`：`wx-cli` 负责从本机微信获取聊天记录，本仓库负责把记录整理成日报 HTML/PNG。
 
+现在新增了一个本地 **Web 控制台**：在浏览器里完成导出、AI 内容生成、日报与长图渲染，支持精确到时分秒的查询、历史记录复用和 AI Agent 配置，全程只在本机运行。
+
 ## 预览
 
 ![群日报预览](examples/qun-ribao-demo.png)
@@ -103,19 +105,22 @@ pip install -r requirements.txt
 
 ## 能做到什么
 
-- 生成微信群「每日聊天记录报告」
+- 生成微信群「每日聊天记录报告」，也支持任意日期范围（周度/跨天复盘）
 - 汇总今日话题、资源链接、重要消息、精彩对话、问答、成员输出
 - 用聊天气泡还原关键对话，不只是统计数字
 - 输出交互式 HTML 和可分享 PNG 长图
 - 支持按成员过滤相关内容
 - 默认用 `jackwener/wx-cli` 获取本地微信聊天记录
+- 查询范围可精确到时分秒（wx-cli 按天粗取 + 本地秒级精过滤）
+- 内置 AI Agent 自动撰写 `ai_content.json`，支持任何 OpenAI 兼容端点（OpenAI / DeepSeek / 阿里云 MaaS / 本地 Ollama 等）
+- Web 控制台一键完成「导出 → AI 内容 → 日报 + 长图」全流程，历史记录可直接复用再加工
 - 可以作为 Obsidian 归档素材：把 HTML/PNG/生成的 Markdown 放进 vault 即可
 
 ## 不能误解的地方
 
 这不是 Obsidian 插件，也不是安装后自动打通微信的插件。
 
-它是一个 Skill + 本地脚本工作流：先拿到微信聊天数据，再让 AI 生成结构化日报内容，最后渲染成 HTML/PNG。如果你想在 Obsidian 里长期查看聊天记录、附件和资料，需要再把导出的 Markdown/HTML/图片/附件目录放入 Obsidian vault。
+它是一个 Skill + 本地脚本工作流：先拿到微信聊天数据，再让 AI 生成结构化日报内容，最后渲染成 HTML/PNG。不想记命令的话，直接用 Web 控制台就能完成同样的流程。如果你想在 Obsidian 里长期查看聊天记录、附件和资料，需要再把导出的 Markdown/HTML/图片/附件目录放入 Obsidian vault。
 
 ## 数据来源怎么选
 
@@ -162,6 +167,28 @@ wx sessions
 mkdir -p ~/.codex/skills
 git clone https://github.com/siuserxiaowei/wechat-daily-report-skill.git ~/.codex/skills/wechat-daily-report-skill
 ```
+
+## Web 控制台（推荐入口）
+
+启动：
+
+```bash
+source .venv/bin/activate   # 或任意已 pip install -r requirements.txt 的环境
+python3 web/app.py
+```
+
+浏览器打开 `http://127.0.0.1:8765`。
+
+能做的事：
+
+| 功能 | 说明 |
+| --- | --- |
+| 导出聊天记录 | 选群（可拉取群列表）、选单日/日期范围；打开「精确到时分秒」可按秒裁剪 |
+| 生成 AI 内容 | 调用配置的 AI Agent 自动产出 `ai_content.json` |
+| 生成日报 HTML + PNG | 渲染日报并截图长图，页面内可直接预览下载 |
+| 一键全流程 | 导出 → AI 内容 → 日报 + 长图（未配密钥时自动跳过 AI 步骤） |
+| 历史记录 | 每次导出按任务聚合展示；可对任意历史记录直接「生成 AI 内容」「生成日报/图」，也可单条删除或全部清除 |
+| AI Agent 配置 | 页面内配置 Base URL / Model / API Key / Temperature / JSON mode，密钥存本地 `config/ai_agent.json`（0600 权限，已 gitignore，回显掩码） |
 
 ## 先跑一遍示例
 
@@ -232,6 +259,19 @@ python3 scripts/wx_cli_to_report.py \
 - `simplified_chat.txt`：压缩后的聊天文本，给 AI 生成日报内容用
 - `raw_wx_history.json`：校正并清理内部身份字段后的聊天 JSON，便于排查
 
+查日期范围或精确到时分秒，把 `--date` 换成 `--start` / `--end`（支持 `2026-04-30`、`2026-04-30 08:30`、`2026-04-30 08:30:00`，也可用 `T` 分隔）：
+
+```bash
+python3 scripts/wx_cli_to_report.py \
+  --chatroom "群名称" \
+  --start "2026-04-27 09:00:00" \
+  --end "2026-04-30 23:59:59" \
+  --output-stats stats.json \
+  --output-text simplified_chat.txt
+```
+
+wx-cli 本身按天粗取，脚本会在本地按秒级区间精过滤，纯日期用法完全向后兼容。
+
 ### 2. 如果只能用本地 wechat-cli 包
 
 你提到的 `wechat-cli-pkg.tar.gz` 也能用。解压后直接把二进制路径传给适配器：
@@ -248,6 +288,27 @@ python3 scripts/wx_cli_to_report.py \
 ```
 
 ### 3. 生成 AI 内容
+
+#### 3a. 自动：调用 AI Agent（推荐）
+
+首次使用先准备配置：
+
+```bash
+cp config/ai_agent.example.json config/ai_agent.json
+# 编辑 config/ai_agent.json，填入 base_url / model / api_key
+```
+
+然后一条命令自动生成 `ai_content.json`：
+
+```bash
+python3 scripts/generate_ai_content.py \
+  --stats stats.json \
+  --output ai_content.json
+```
+
+脚本只用标准库 urllib 请求 OpenAI 兼容的 `/chat/completions` 接口，无额外 SDK；自动从 `stats.json` 里记录的文本路径读取聊天记录，按提示词模板生成结构化 JSON，并把 `talker_profiles` 对齐到 `top_talkers`。配置优先级：命令行参数 > 环境变量（`WECHAT_AI_BASE_URL` / `WECHAT_AI_MODEL` / `WECHAT_AI_API_KEY`，兼容 `OPENAI_API_KEY`）> 配置文件 > 内置默认。macOS 上若报 SSL 证书错误，先 `pip install certifi`（已在 requirements 中），仍不行可加 `--insecure` 临时跳过校验。
+
+#### 3b. 手动：交给对话中的 AI
 
 把下面三个东西一起交给 AI：
 
@@ -311,8 +372,12 @@ HTML 交互版：[[2026-04-30-report.html]]
 ## 项目结构
 
 ```text
+web/app.py                       # Flask Web 控制台（导出/AI/日报/历史/配置，端口 8765）
+web/templates/index.html         # 控制台单页前端
+config/ai_agent.example.json     # AI Agent 配置模板（复制为 ai_agent.json 使用）
 assets/report_template.html      # 新版日报 UI 模板
-scripts/wx_cli_to_report.py      # wx-cli/wechat-cli 转日报输入
+scripts/wx_cli_to_report.py      # wx-cli/wechat-cli 转日报输入（支持秒级精过滤）
+scripts/generate_ai_content.py   # 调用 AI Agent 自动生成 ai_content.json
 scripts/analyze_chat.py          # 从本地微信数据生成 stats/simplified_chat
 scripts/generate_report.py       # Jinja2 渲染 HTML，并用 Playwright 输出 PNG
 references/ai_prompt.md          # AI 生成 ai_content.json 的提示词

@@ -1,8 +1,8 @@
 {
   "meta": {
-    "name": "Dont哥 对谈群",
+    "name": "宛如生活",
     "source": "input-json",
-    "date": "2026-04-30",
+    "date": "2026-11-03",
     "total_count": 7,
     "active_user_count": 3,
     "time_range": "09:10 至 23:53"
@@ -12,37 +12,19 @@
       "rank": 1,
       "name": "小魏",
       "count": 3,
-      "common_words": [
-        "聊天",
-        "wx",
-        "cli",
-        "想要",
-        "看到"
-      ]
+      "common_words": []
     },
     {
       "rank": 2,
       "name": "Dont哥",
       "count": 2,
-      "common_words": [
-        "今天",
-        "微信",
-        "聊天记录",
-        "Obsidian",
-        "路线"
-      ]
+      "common_words": []
     },
     {
       "rank": 3,
       "name": "HOORAY",
       "count": 2,
-      "common_words": [
-        "wx",
-        "cli",
-        "本地",
-        "直接",
-        "微信"
-      ]
+      "common_words": []
     }
   ],
   "night_owl": {
@@ -54,8 +36,8 @@
   },
   "word_cloud": [
     {
-      "text": "wx",
-      "count": 5,
+      "text": "wx-cli",
+      "count": 3,
       "size": 40,
       "color": "#7a351f",
       "left": 77,
@@ -63,463 +45,328 @@
       "rotate": 10
     },
     {
-      "text": "cli",
-      "count": 5,
-      "size": 40,
+      "text": "wechat-cli",
+      "count": 2,
+      "size": 30,
       "color": "#415f8f",
       "left": 23,
       "top": 228,
       "rotate": 3
     },
     {
-      "text": "微信",
+      "text": "wx",
       "count": 2,
-      "size": 23,
+      "size": 30,
       "color": "#287a5b",
       "left": 69,
       "top": 49,
       "rotate": -10
     },
     {
-      "text": "聊天",
-      "count": 2,
-      "size": 23,
+      "text": "今天先把微信聊天记录到",
+      "count": 1,
+      "size": 21,
       "color": "#7a351f",
       "left": 67,
       "top": 115,
       "rotate": -5
     },
     {
-      "text": "日报",
-      "count": 2,
-      "size": 23,
+      "text": "Obsidian",
+      "count": 1,
+      "size": 21,
       "color": "#d39b35",
       "left": 21,
       "top": 230,
       "rotate": -1
     },
     {
-      "text": "本地",
-      "count": 2,
-      "size": 23,
+      "text": "的路线讲清楚",
+      "count": 1,
+      "size": 21,
       "color": "#415f8f",
       "left": 8,
       "top": 47,
       "rotate": -4
     },
     {
-      "text": "数据",
-      "count": 2,
-      "size": 23,
+      "text": "我想要的是能看到聊天资料",
+      "count": 1,
+      "size": 21,
       "color": "#415f8f",
       "left": 35,
       "top": 65,
       "rotate": -8
     },
     {
-      "text": "wechat",
-      "count": 2,
-      "size": 23,
+      "text": "还有每天的聊天日报",
+      "count": 1,
+      "size": 21,
       "color": "#d39b35",
       "left": 16,
       "top": 106,
       "rotate": -11
     },
     {
-      "text": "今天",
+      "text": "可以直接查本地微信数据",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#b45f2a",
       "left": 27,
       "top": 253,
       "rotate": 0
     },
     {
-      "text": "聊天记录",
+      "text": "日报这边只要接",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#d39b35",
       "left": 44,
       "top": 235,
       "rotate": 8
     },
     {
-      "text": "Obsidian",
+      "text": "history",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#8b5a86",
       "left": 81,
       "top": 90,
       "rotate": 9
     },
     {
-      "text": "路线",
+      "text": "JSON",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#8b5a86",
       "left": 66,
       "top": 83,
       "rotate": 2
     },
     {
-      "text": "讲清楚",
+      "text": "那就让",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#d39b35",
       "left": 11,
       "top": 173,
       "rotate": -10
     },
     {
-      "text": "想要",
+      "text": "做数据入口",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#287a5b",
       "left": 43,
       "top": 164,
       "rotate": -11
     },
     {
-      "text": "看到",
+      "text": "我们只负责转",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#8b5a86",
       "left": 53,
       "top": 53,
       "rotate": -4
     },
     {
-      "text": "资料",
+      "text": "stats",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#d39b35",
       "left": 79,
       "top": 90,
       "rotate": 2
     },
     {
-      "text": "还有",
+      "text": "simplified_chat",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#287a5b",
       "left": 70,
       "top": 199,
       "rotate": -5
     },
     {
-      "text": "每天",
+      "text": "README",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#b45f2a",
       "left": 38,
       "top": 63,
       "rotate": -11
     },
     {
-      "text": "直接",
+      "text": "里必须写清楚",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#7a351f",
       "left": 82,
       "top": 108,
       "rotate": -7
     },
     {
-      "text": "这边",
+      "text": "获取记录",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#7a351f",
       "left": 82,
       "top": 250,
       "rotate": 8
     },
     {
-      "text": "只要",
+      "text": "AI",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#b45f2a",
       "left": 35,
       "top": 162,
       "rotate": 10
     },
     {
-      "text": "history",
+      "text": "生成",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#8b5a86",
       "left": 83,
       "top": 164,
       "rotate": -5
     },
     {
-      "text": "JSON",
+      "text": "ai_content",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#7a351f",
       "left": 11,
       "top": 232,
       "rotate": 5
     },
     {
-      "text": "就让",
+      "text": "最后渲染",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#b45f2a",
       "left": 41,
       "top": 233,
       "rotate": -6
     },
     {
-      "text": "入口",
+      "text": "HTML",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#287a5b",
       "left": 28,
       "top": 107,
       "rotate": 2
     },
     {
-      "text": "负责",
+      "text": "PNG",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#b45f2a",
       "left": 79,
       "top": 200,
       "rotate": 2
     },
     {
-      "text": "stats",
+      "text": "本地",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#b45f2a",
       "left": 34,
       "top": 186,
       "rotate": 9
     },
     {
-      "text": "simplified",
+      "text": "tar",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#d39b35",
       "left": 31,
       "top": 46,
       "rotate": 6
     },
     {
-      "text": "chat",
+      "text": "包可以做",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#7a351f",
       "left": 25,
       "top": 200,
       "rotate": 1
     },
     {
-      "text": "README",
+      "text": "fallback",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#b45f2a",
       "left": 36,
       "top": 171,
       "rotate": -1
     },
     {
-      "text": "必须",
+      "text": "命令叫",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#415f8f",
       "left": 69,
       "top": 112,
       "rotate": -7
     },
     {
-      "text": "清楚",
+      "text": "参数和",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#8b5a86",
       "left": 63,
       "top": 197,
       "rotate": 8
     },
     {
-      "text": "获取",
+      "text": "有点不一样",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#287a5b",
       "left": 77,
       "top": 141,
       "rotate": -2
     },
     {
-      "text": "记录",
+      "text": "适配器写成",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#8b5a86",
       "left": 87,
       "top": 194,
       "rotate": 12
     },
     {
-      "text": "AI",
+      "text": "auto",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#287a5b",
       "left": 47,
       "top": 54,
       "rotate": 3
     },
     {
-      "text": "生成",
+      "text": "先找",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#d39b35",
       "left": 52,
       "top": 170,
       "rotate": 2
     },
     {
-      "text": "ai",
+      "text": "没有再找",
       "count": 1,
-      "size": 17,
+      "size": 21,
       "color": "#b45f2a",
       "left": 56,
       "top": 69,
       "rotate": -11
-    },
-    {
-      "text": "content",
-      "count": 1,
-      "size": 17,
-      "color": "#8b5a86",
-      "left": 33,
-      "top": 97,
-      "rotate": -11
-    },
-    {
-      "text": "最后",
-      "count": 1,
-      "size": 17,
-      "color": "#287a5b",
-      "left": 69,
-      "top": 170,
-      "rotate": -1
-    },
-    {
-      "text": "渲染",
-      "count": 1,
-      "size": 17,
-      "color": "#8b5a86",
-      "left": 59,
-      "top": 148,
-      "rotate": 12
-    },
-    {
-      "text": "HTML",
-      "count": 1,
-      "size": 17,
-      "color": "#b45f2a",
-      "left": 9,
-      "top": 60,
-      "rotate": -6
-    },
-    {
-      "text": "PNG",
-      "count": 1,
-      "size": 17,
-      "color": "#8b5a86",
-      "left": 40,
-      "top": 74,
-      "rotate": 1
-    },
-    {
-      "text": "tar",
-      "count": 1,
-      "size": 17,
-      "color": "#b45f2a",
-      "left": 79,
-      "top": 188,
-      "rotate": -2
-    },
-    {
-      "text": "fallback",
-      "count": 1,
-      "size": 17,
-      "color": "#8b5a86",
-      "left": 72,
-      "top": 177,
-      "rotate": 1
-    },
-    {
-      "text": "命令",
-      "count": 1,
-      "size": 17,
-      "color": "#287a5b",
-      "left": 34,
-      "top": 58,
-      "rotate": -12
-    },
-    {
-      "text": "参数",
-      "count": 1,
-      "size": 17,
-      "color": "#d39b35",
-      "left": 24,
-      "top": 79,
-      "rotate": -12
-    },
-    {
-      "text": "有点",
-      "count": 1,
-      "size": 17,
-      "color": "#8b5a86",
-      "left": 19,
-      "top": 72,
-      "rotate": 8
-    },
-    {
-      "text": "一样",
-      "count": 1,
-      "size": 17,
-      "color": "#8b5a86",
-      "left": 68,
-      "top": 89,
-      "rotate": 11
-    },
-    {
-      "text": "适配器",
-      "count": 1,
-      "size": 17,
-      "color": "#287a5b",
-      "left": 22,
-      "top": 110,
-      "rotate": 1
-    },
-    {
-      "text": "写成",
-      "count": 1,
-      "size": 17,
-      "color": "#b45f2a",
-      "left": 45,
-      "top": 164,
-      "rotate": 1
-    },
-    {
-      "text": "auto",
-      "count": 1,
-      "size": 17,
-      "color": "#287a5b",
-      "left": 81,
-      "top": 83,
-      "rotate": -11
-    },
-    {
-      "text": "先找",
-      "count": 1,
-      "size": 17,
-      "color": "#7a351f",
-      "left": 88,
-      "top": 86,
-      "rotate": -9
     }
   ],
   "name_avatar_map": {},

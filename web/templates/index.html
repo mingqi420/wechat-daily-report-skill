@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>微信日报控制台</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #eef1f8;
+      --card:     #ffffff;
+      --border:   #e5e8f0;
+      --text:     #171c30;
+      --muted:    #7b8299;
+      --accent:   #4f46e5;
+      --accent-h: #4338ca;
+      --accent-2: #7c3aed;
+      --green:    #059669;
+      --red:      #dc2626;
+      --amber:    #d97706;
+      --grad:     linear-gradient(135deg, #4f46e5, #7c3aed);
+      --grad-ai:  linear-gradient(135deg, #7c3aed, #a855f7);
+      --grad-ok:  linear-gradient(135deg, #059669, #10b981);
+      --radius:   16px;
+      --shadow:   0 1px 2px rgba(23,28,48,.05), 0 12px 32px rgba(79,70,229,.10);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+                   "Hiragino Sans GB", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 8px 16px 72px;
+    }
+
+    /* 氛围光晕 */
+    body::before, body::after {
+      content: ""; position: fixed; z-index: -1; border-radius: 50%;
+      filter: blur(90px); pointer-events: none;
+    }
+    body::before { width: 520px; height: 520px; top: -180px; left: -140px; background: rgba(129,140,248,.35); }
+    body::after  { width: 560px; height: 560px; top: -120px; right: -180px; background: rgba(167,139,250,.30); }
+
+    ::selection { background: rgba(79,70,229,.18); }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: #c9cee0; border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: #aab1c9; }
+    ::-webkit-scrollbar-track { background: transparent; }
+
+    /* layout */
+    .page { max-width: 880px; margin: 0 auto; }
+
+    header { display: flex; align-items: center; gap: 16px; margin: 32px 0 28px; }
+    .logo-badge {
+      width: 54px; height: 54px; border-radius: 16px; flex-shrink: 0;
+      background: var(--grad); color: #fff; font-size: 26px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 10px 24px rgba(79,70,229,.35);
+    }
+    header h1 {
+      font-size: 26px; font-weight: 800; letter-spacing: -.4px;
+      background: var(--grad); -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+    header p { color: var(--muted); font-size: 13.5px; margin-top: 3px; }
+    .hero-badges { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .hero-badge {
+      font-size: 11.5px; font-weight: 700; color: #4b5578; white-space: nowrap;
+      background: rgba(255,255,255,.75); border: 1px solid var(--border);
+      padding: 4px 11px; border-radius: 999px; backdrop-filter: blur(4px);
+    }
+
+    /* card */
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(229,232,240,.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      margin-bottom: 20px;
+      animation: rise .45s ease both;
+    }
+    .card:nth-of-type(2) { animation-delay: .07s; }
+    .card:nth-of-type(3) { animation-delay: .14s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+    .card-title {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 15px; font-weight: 700; color: var(--text);
+      margin-bottom: 20px;
+    }
+    .card-title .ico {
+      width: 27px; height: 27px; border-radius: 8px; flex-shrink: 0;
+      background: var(--grad); color: #fff; font-size: 13px;
+      display: inline-flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 10px rgba(79,70,229,.28);
+    }
+
+    /* form grid */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .form-grid .full { grid-column: 1 / -1; }
+
+    label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 7px; }
+    label span.hint { font-weight: 400; color: var(--muted); font-size: 12px; }
+
+    input[type="date"],
+    input[type="datetime-local"],
+    input[type="password"],
+    select,
+    input[type="text"] {
+      width: 100%;
+      height: 42px;
+      padding: 0 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--text);
+      background: #fbfbfe;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s, background .15s;
+      -webkit-appearance: none;
+    }
+    input[type="date"]:hover,
+    input[type="datetime-local"]:hover,
+    input[type="password"]:hover,
+    select:hover,
+    input[type="text"]:hover { border-color: #c9cee0; }
+    input[type="date"]:focus,
+    input[type="datetime-local"]:focus,
+    input[type="password"]:focus,
+    select:focus,
+    input[type="text"]:focus { background: #fff; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,70,229,.13); }
+
+    select { padding-right: 36px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237b8299' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+
+    /* buttons */
+    .btn-row { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+
+    button {
+      display: inline-flex; align-items: center; gap: 7px;
+      height: 42px; padding: 0 20px;
+      border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: background .15s, opacity .15s, transform .15s, box-shadow .15s, filter .15s;
+      white-space: nowrap;
+    }
+    button:active:not(:disabled) { transform: scale(.97); }
+    button:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .btn-primary  { background: var(--grad);    color: #fff; box-shadow: 0 4px 14px rgba(79,70,229,.28); }
+    .btn-primary:hover:not(:disabled)  { filter: brightness(1.07); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(79,70,229,.36); }
+    .btn-ai       { background: var(--grad-ai); color: #fff; box-shadow: 0 4px 14px rgba(124,58,237,.28); }
+    .btn-ai:hover:not(:disabled)       { filter: brightness(1.07); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(124,58,237,.36); }
+    .btn-success  { background: var(--grad-ok); color: #fff; box-shadow: 0 4px 14px rgba(5,150,105,.25); }
+    .btn-success:hover:not(:disabled)  { filter: brightness(1.07); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(5,150,105,.32); }
+    .btn-ghost    { background: var(--card); color: var(--muted); border: 1px solid var(--border); }
+    .btn-ghost:hover:not(:disabled)    { background: #f3f4fa; color: var(--text); border-color: #c9cee0; }
+    .btn-danger   { background: #fff; color: var(--red); border: 1px solid #fecaca; }
+    .btn-danger:hover:not(:disabled)   { background: var(--red); color: #fff; border-color: var(--red); }
+
+    /* 分段控件（单日 / 范围） */
+    .seg { display: inline-flex; gap: 4px; background: #e9ebf5; border-radius: 999px; padding: 4px; }
+    .seg .btn-ghost { height: 30px; padding: 0 18px; border: none; border-radius: 999px; background: transparent; font-size: 13px; }
+    .seg .btn-ghost:hover:not(:disabled) { background: rgba(255,255,255,.7); color: var(--text); }
+
+    /* history rows */
+    .hist-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 16px; margin-bottom: 10px;
+      background: #fbfbfe; border: 1px solid var(--border); border-radius: 12px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .hist-row:last-child { margin-bottom: 0; }
+    .hist-row:hover { border-color: #c9cee0; box-shadow: 0 4px 14px rgba(23,28,48,.07); }
+    .hist-main { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+    .hist-id { font-family: "SF Mono", "Menlo", monospace; font-size: 13px; font-weight: 700; color: var(--accent); }
+    .hist-meta { font-size: 12px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .hist-tag { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: #f1f3f9; color: var(--muted); border: 1px solid var(--border); }
+    .hist-tag.report { background: #ecfdf5; color: var(--green); border-color: #a7f3d0; }
+    .hist-tag.stats { background: #eef2ff; color: #4f46e5; border-color: #e0e7ff; }
+    .hist-tag.chat  { background: #f0f9ff; color: #0369a1; border-color: #e0f2fe; }
+    .hist-tag.raw   { background: #f8fafc; color: #64748b; border-color: #f1f5f9; }
+    .hist-tag.ai    { background: #f5f3ff; color: #7c3aed; border-color: #ede9fe; }
+    .hist-tag.html  { background: #fff7ed; color: #c2410c; border-color: #ffedd5; }
+    .hist-tag.png   { background: #fdf4ff; color: #a21caf; border-color: #fae8ff; }
+    .hist-acts { display: flex; gap: 8px; flex-shrink: 0; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+    .hist-link { font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none; height: 28px; display: inline-flex; align-items: center; padding: 0 10px; border-radius: 8px; border: 1px solid var(--border); background: #fff; transition: all .15s; }
+    .hist-link:hover { background: var(--grad); color: #fff; border-color: transparent; }
+    .hist-op { font-size: 12px; font-weight: 600; color: var(--accent); background: #fff; border: 1px solid var(--border); height: 28px; padding: 0 10px; border-radius: 8px; cursor: pointer; transition: all .15s; }
+    .hist-op:hover:not(:disabled) { background: var(--grad); color: #fff; border-color: transparent; }
+    .hist-op.ai { color: var(--accent-2); }
+    .hist-op.ai:hover:not(:disabled) { background: var(--grad-ai); }
+    .hist-op:disabled { opacity: .5; cursor: default; }
+    .hist-del { font-size: 12px; font-weight: 600; color: var(--red); background: transparent; border: 1px solid var(--border); height: 28px; padding: 0 10px; border-radius: 8px; cursor: pointer; transition: all .15s; }
+    .hist-del:hover { background: var(--red); color: #fff; border-color: var(--red); }
+    .hist-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 36px 0 30px; }
+    .hist-empty .ico { font-size: 34px; display: block; margin-bottom: 10px; opacity: .8; }
+
+    /* AI agent config box */
+    .ai-config-box { margin-top: 20px; border: 1px solid var(--border); border-radius: 12px; background: #f8f8fd; overflow: hidden; }
+    .ai-config-head { display: flex; align-items: center; gap: 10px; padding: 13px 16px; cursor: pointer; user-select: none; transition: background .15s; }
+    .ai-config-head:hover { background: #f0effa; }
+    .ai-cfg-title { font-size: 13px; font-weight: 700; color: var(--text); display: inline-flex; align-items: center; gap: 8px; }
+    .ai-cfg-title .ico { width: 24px; height: 24px; border-radius: 7px; background: var(--grad-ai); color: #fff; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 3px 8px rgba(124,58,237,.3); }
+    .ai-cfg-status { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--muted); }
+    .ai-cfg-status.ok { color: var(--green); }
+    .ai-cfg-caret { font-size: 12px; color: var(--muted); transition: transform .2s; }
+    .ai-config-body { padding: 0 16px 18px; background: var(--card); border-top: 1px solid var(--border); }
+
+    /* precision toggle switch */
+    .switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+    .switch em { font-style: normal; font-size: 12px; font-weight: 600; color: var(--muted); }
+    .switch input { display: none; }
+    .switch .slider { position: relative; width: 40px; height: 22px; background: #d5d9e8; border-radius: 999px; transition: background .2s; flex-shrink: 0; }
+    .switch .slider::before { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+    .switch input:checked + .slider { background: var(--grad); }
+    .switch input:checked + .slider::before { transform: translateX(18px); }
+    .switch input:checked ~ em { color: var(--accent); }
+
+    /* spinner */
+    .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* status bar */
+    .status-bar {
+      display: flex; align-items: center; gap: 9px;
+      padding: 11px 15px; border-radius: 10px;
+      font-size: 13px; font-weight: 600;
+      margin-top: 16px;
+      animation: rise .25s ease;
+    }
+    .status-bar.info    { background: #eef2ff; color: var(--accent); border: 1px solid #c7d2fe; }
+    .status-bar.ok      { background: #ecfdf5; color: var(--green);  border: 1px solid #a7f3d0; }
+    .status-bar.err     { background: #fef2f2; color: var(--red);    border: 1px solid #fecaca; }
+    .status-bar.warn    { background: #fffbeb; color: var(--amber);  border: 1px solid #fde68a; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+    .status-dot.pulse { animation: pulse 1s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+    /* log panel */
+    .log-panel {
+      margin-top: 14px;
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: "SF Mono", "Menlo", "Monaco", monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #94a3b8;
+      box-shadow: inset 0 0 0 1px rgba(148,163,184,.12);
+    }
+    .log-panel .line-cmd   { color: #60a5fa; }
+    .log-panel .line-ok    { color: #4ade80; }
+    .log-panel .line-err   { color: #f87171; }
+    .log-panel .line-warn  { color: #fbbf24; }
+
+    /* result cards */
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .result-card {
+      position: relative; overflow: hidden;
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px 18px; background: #fbfbfe;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: box-shadow .15s, transform .15s;
+    }
+    .result-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad); }
+    .result-card:hover { box-shadow: 0 8px 22px rgba(23,28,48,.08); transform: translateY(-2px); }
+    .result-card h4 { font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 7px; }
+    .result-card .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .result-card a {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 13px; border-radius: 8px;
+      font-size: 13px; font-weight: 600; text-decoration: none;
+      background: var(--grad); color: #fff;
+      box-shadow: 0 3px 10px rgba(79,70,229,.25);
+      transition: filter .15s, transform .15s, box-shadow .15s;
+    }
+    .result-card a:hover { filter: brightness(1.07); transform: translateY(-1px); box-shadow: 0 6px 14px rgba(79,70,229,.32); }
+    .result-card a.secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); box-shadow: none; }
+    .result-card a.secondary:hover { background: #f3f4fa; border-color: #c9cee0; box-shadow: none; }
+
+    /* preview iframe */
+    .preview-wrap { margin-top: 16px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(23,28,48,.05); }
+    .preview-bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f6f7fb; border-bottom: 1px solid var(--border); }
+    .preview-bar span { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .3px; }
+    .preview-bar button { height: 28px; padding: 0 12px; font-size: 12px; }
+    iframe { width: 100%; height: 420px; border: none; display: block; background: #fff; }
+
+    /* toast */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: #171c30; color: #fff; padding: 11px 20px; border-radius: 999px;
+      font-size: 13px; font-weight: 600; opacity: 0; transition: all .25s;
+      pointer-events: none; white-space: nowrap; z-index: 999;
+      box-shadow: 0 10px 30px rgba(23,28,48,.35);
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    footer { text-align: center; color: #9aa1b9; font-size: 12px; margin-top: 32px; }
+
+    @media (max-width: 640px) {
+      header { flex-wrap: wrap; }
+      .hero-badges { margin-left: 0; width: 100%; justify-content: flex-start; }
+      .form-grid { grid-template-columns: 1fr; }
+      .result-grid { grid-template-columns: 1fr; }
+      .btn-row { flex-direction: column; }
+      button { width: 100%; justify-content: center; }
+      .hist-row { flex-direction: column; align-items: flex-start; }
+      .hist-acts { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="logo-badge">💬</div>
+    <div>
+      <h1>微信日报控制台</h1>
+      <p>导出群聊记录 · AI 提炼洞察 · 一键生成日报与长图</p>
+    </div>
+    <div class="hero-badges">
+      <span class="hero-badge">本地运行</span>
+      <span class="hero-badge">数据不出机器</span>
+    </div>
+  </header>
+
+  <!-- 配置卡片 -->
+  <div class="card">
+    <div class="card-title"><span class="ico">📋</span>任务配置</div>
+    <div class="form-grid">
+
+      <!-- 群聊选择 -->
+      <div class="full">
+        <label>微信群聊 <span class="hint">（从列表选择，或直接输入群名）</span></label>
+        <div style="display:flex;gap:10px;">
+          <select id="groupSelect" style="flex:1;" onchange="onGroupSelect()">
+            <option value="">— 点击「加载群列表」获取 —</option>
+          </select>
+          <button class="btn-ghost" id="btnLoadGroups" onclick="loadGroups()" style="flex-shrink:0;">加载群列表</button>
+        </div>
+        <input type="text" id="chatroomInput" placeholder="手动输入群名称（可覆盖上方选择）" style="margin-top:8px;" />
+      </div>
+
+      <!-- 日期模式切换 -->
+      <div class="full">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <label style="margin:0;">日期范围</label>
+          <label class="switch" title="开启后可精确到时分秒">
+            <input type="checkbox" id="precisionSwitch" onchange="togglePrecision()" />
+            <span class="slider"></span>
+            <em>精确到时分秒</em>
+          </label>
+        </div>
+        <div class="seg" style="margin-bottom:12px;">
+          <button class="btn-ghost" id="modeSingle" onclick="setDateMode('single')">单日</button>
+          <button class="btn-ghost" id="modeRange"  onclick="setDateMode('range')">范围</button>
+        </div>
+        <!-- 普通日期模式 -->
+        <div id="dateSingleWrap">
+          <input type="date" id="dateSingle" />
+        </div>
+        <div id="dateRangeWrap" style="display:none;gap:12px;">
+          <div style="flex:1;"><label style="font-size:12px;color:var(--muted);">开始日期</label><input type="date" id="dateStart" /></div>
+          <div style="flex:1;"><label style="font-size:12px;color:var(--muted);">结束日期</label><input type="date" id="dateEnd" /></div>
+        </div>
+        <!-- 精确模式：始终为“开始时刻 ~ 结束时刻” -->
+        <div id="preciseRangeWrap" style="display:none;gap:12px;">
+          <div style="flex:1;"><label style="font-size:12px;color:var(--muted);">开始时刻</label><input type="datetime-local" id="preciseStart" step="1" /></div>
+          <div style="flex:1;"><label style="font-size:12px;color:var(--muted);">结束时刻</label><input type="datetime-local" id="preciseEnd" step="1" /></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="btn-row">
+      <button class="btn-primary" id="btnExport" onclick="doExport()">
+        <span id="btnExportIcon">①</span> 导出聊天记录
+      </button>
+      <button class="btn-ai" id="btnGenAi" onclick="doGenerateAi()" disabled>
+        <span id="btnGenAiIcon">②</span> 生成 AI 内容
+      </button>
+      <button class="btn-success" id="btnGenerate" onclick="doGenerate()" disabled>
+        <span id="btnGenerateIcon">③</span> 生成日报 HTML + PNG
+      </button>
+      <button class="btn-ghost" id="btnOne" onclick="doOneClick()">
+        <span>▶</span> 一键全流程
+      </button>
+    </div>
+
+    <!-- AI Agent 配置 -->
+    <div class="ai-config-box">
+      <div class="ai-config-head" onclick="toggleAiConfig()">
+        <span class="ai-cfg-title"><span class="ico">🤖</span>AI Agent 配置</span>
+        <span class="ai-cfg-status" id="aiConfigStatus">未配置</span>
+        <span class="ai-cfg-caret" id="aiConfigCaret">▾</span>
+      </div>
+      <div class="ai-config-body" id="aiConfigBody" style="display:none;">
+        <div class="form-grid" style="margin-top:16px;">
+          <div class="full">
+            <label>Base URL <span class="hint">（任何 OpenAI 兼容端点）</span></label>
+            <input type="text" id="aiBaseUrl" placeholder="https://api.openai.com/v1" />
+          </div>
+          <div>
+            <label>Model</label>
+            <input type="text" id="aiModel" placeholder="gpt-4o-mini" />
+          </div>
+          <div>
+            <label>Temperature</label>
+            <input type="text" id="aiTemperature" placeholder="0.6" />
+          </div>
+          <div class="full">
+            <label>API Key <span class="hint" id="aiKeyHint"></span></label>
+            <input type="password" id="aiApiKey" placeholder="留空则不修改已保存的密钥" autocomplete="off" />
+          </div>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;font-size:13px;">
+          <input type="checkbox" id="aiJsonMode" style="width:auto;height:auto;" />
+          <span>启用 JSON mode（仅部分端点支持，能提升输出稳定性）</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer;font-size:13px;">
+          <input type="checkbox" id="aiSkipSsl" style="width:auto;height:auto;" />
+          <span>跳过 SSL 证书校验（macOS 报证书错误且装不了 certifi 时才勾选，安全性降低）</span>
+        </label>
+        <div class="btn-row" style="margin-top:16px;">
+          <button class="btn-primary" id="btnSaveAi" onclick="saveAiConfig()" style="height:36px;">保存配置</button>
+          <span style="font-size:12px;color:var(--muted);align-self:center;">密钥会写入本地 config/ai_agent.json（已加入 .gitignore）</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 状态 -->
+    <div id="statusBar" class="status-bar info" style="display:none;">
+      <div class="status-dot pulse" id="statusDot"></div>
+      <span id="statusText"></span>
+    </div>
+
+    <!-- 日志 -->
+    <div id="logPanel" class="log-panel" style="display:none;"></div>
+  </div>
+
+  <!-- 结果卡片 -->
+  <div class="card" id="resultCard" style="display:none;">
+    <div class="card-title"><span class="ico">✨</span>生成结果</div>
+    <div class="result-grid">
+      <div class="result-card">
+        <h4>📄 HTML 日报</h4>
+        <div class="actions">
+          <a id="htmlPreviewBtn" href="#" target="_blank">在新标签打开</a>
+          <a id="htmlDownloadBtn" href="#" download class="secondary">下载 HTML</a>
+        </div>
+      </div>
+      <div class="result-card">
+        <h4>🖼️ PNG 长图</h4>
+        <div class="actions">
+          <a id="pngPreviewBtn" href="#" target="_blank">查看图片</a>
+          <a id="pngDownloadBtn" href="#" download class="secondary">下载 PNG</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 内嵌预览 -->
+    <div class="preview-wrap">
+      <div class="preview-bar">
+        <span>HTML 预览</span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-ghost" onclick="reloadPreview()" style="height:28px;padding:0 10px;font-size:12px;">刷新</button>
+          <button class="btn-ghost" onclick="togglePreview()" id="btnTogglePv" style="height:28px;padding:0 10px;font-size:12px;">收起</button>
+        </div>
+      </div>
+      <iframe id="previewFrame" src="about:blank"></iframe>
+    </div>
+  </div>
+
+  <!-- 历史记录卡片 -->
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div class="card-title" style="margin:0;"><span class="ico">🕘</span>历史记录</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-ghost" onclick="loadHistory()" style="height:32px;padding:0 14px;font-size:13px;">刷新</button>
+        <button class="btn-danger" id="btnClearAll" onclick="clearHistory()" style="height:32px;padding:0 14px;font-size:13px;">清除全部</button>
+      </div>
+    </div>
+    <div id="historyEmpty" class="hist-empty" style="display:none;"><span class="ico">🗂</span>暂无历史记录，先导出一次群聊吧</div>
+    <div id="historyList"></div>
+  </div>
+
+  <footer>wechat-daily-report-skill · 仅在本机运行，聊天记录不上传云端</footer>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── state ────────────────────────────────────────────────────────────────────
+let dateMode    = "single";
+let exportTask  = null;
+let pollTimer   = null;
+let previewVisible = true;
+
+// 初始化日期为今天
+const today = new Date().toISOString().slice(0, 10);
+document.getElementById("dateSingle").value = today;
+document.getElementById("dateStart").value  = today;
+document.getElementById("dateEnd").value    = today;
+// 精确模式默认值：今天 00:00:00 ~ 23:59:59
+document.getElementById("preciseStart").value  = today + "T00:00:00";
+document.getElementById("preciseEnd").value    = today + "T23:59:59";
+
+// ── date mode ────────────────────────────────────────────────────────────────
+function isPrecise() { return document.getElementById("precisionSwitch").checked; }
+
+function setDateMode(mode) {
+  dateMode = mode;
+  refreshDateUI();
+  setActiveModeBtn();
+}
+function togglePrecision() { refreshDateUI(); }
+function refreshDateUI() {
+  const precise = isPrecise();
+  const single  = dateMode === "single";
+  // 精确模式下忽略单日/范围，统一用开始~结束时刻
+  document.getElementById("modeSingle").disabled = precise;
+  document.getElementById("modeRange").disabled  = precise;
+  document.getElementById("dateSingleWrap").style.display    = (!precise && single) ? "block" : "none";
+  document.getElementById("dateRangeWrap").style.display     = (!precise && !single) ? "flex"  : "none";
+  document.getElementById("preciseRangeWrap").style.display  = precise ? "flex" : "none";
+}
+function setActiveModeBtn() {
+  const s = document.getElementById("modeSingle");
+  const r = document.getElementById("modeRange");
+  const active = { background: "var(--accent)", color: "#fff", borderColor: "var(--accent)" };
+  const idle   = { background: "", color: "", borderColor: "" };
+  Object.assign(s.style, dateMode === "single" ? active : idle);
+  Object.assign(r.style, dateMode === "range"  ? active : idle);
+}
+setActiveModeBtn();
+
+// ── helpers ──────────────────────────────────────────────────────────────────
+function getChatroom() {
+  const manual = document.getElementById("chatroomInput").value.trim();
+  const sel    = document.getElementById("groupSelect").value.trim();
+  return manual || sel;
+}
+function getDates() {
+  // datetime-local 值形如 2026-04-30T08:30:00，转成空格分隔便于脚本解析
+  if (isPrecise()) {
+    const s = document.getElementById("preciseStart").value.replace("T", " ");
+    const e = document.getElementById("preciseEnd").value.replace("T", " ");
+    return { date: s.slice(0, 10), start: s, end: e };
+  }
+  if (dateMode === "single") {
+    const d = document.getElementById("dateSingle").value;
+    return { date: d, start: d, end: d };
+  }
+  return {
+    date:  document.getElementById("dateStart").value,
+    start: document.getElementById("dateStart").value,
+    end:   document.getElementById("dateEnd").value,
+  };
+}
+function fmtDate(d) { return d || "—"; }
+
+// ── groups ───────────────────────────────────────────────────────────────────
+async function loadGroups() {
+  const btn = document.getElementById("btnLoadGroups");
+  btn.disabled = true; btn.innerHTML = '<span class="spin" style="border-top-color:var(--muted);border-color:var(--border);"></span> 加载中';
+  try {
+    const r = await fetch("/api/groups").then(r => r.json());
+    if (!r.ok) { toast("加载失败：" + r.error, true); return; }
+    const sel = document.getElementById("groupSelect");
+    sel.innerHTML = '<option value="">— 请选择群聊 —</option>';
+    r.groups.forEach(g => {
+      const o = document.createElement("option");
+      o.value = g.name; o.textContent = g.name;
+      sel.appendChild(o);
+    });
+    toast(`已加载 ${r.groups.length} 个群聊`);
+  } finally {
+    btn.disabled = false; btn.textContent = "加载群列表";
+  }
+}
+function onGroupSelect() {
+  const v = document.getElementById("groupSelect").value;
+  if (v) document.getElementById("chatroomInput").value = v;
+}
+
+// ── status ───────────────────────────────────────────────────────────────────
+function setStatus(text, type) {
+  const bar  = document.getElementById("statusBar");
+  const dot  = document.getElementById("statusDot");
+  bar.style.display = "flex";
+  bar.className = "status-bar " + ({ info:"info", ok:"ok", err:"err", warn:"warn" }[type] || "info");
+  dot.className = "status-dot" + (type === "info" ? " pulse" : "");
+  document.getElementById("statusText").textContent = text;
+}
+function setLog(lines) {
+  const panel = document.getElementById("logPanel");
+  panel.style.display = "block";
+  panel.innerHTML = lines.map(l => {
+    if (l.startsWith("$ "))          return `<div class="line-cmd">${esc(l)}</div>`;
+    if (l.includes("Error") || l.includes("错误")) return `<div class="line-err">${esc(l)}</div>`;
+    if (l.includes("Warning"))       return `<div class="line-warn">${esc(l)}</div>`;
+    if (l.includes("saved") || l.includes("generated")) return `<div class="line-ok">${esc(l)}</div>`;
+    return `<div>${esc(l)}</div>`;
+  }).join("");
+  panel.scrollTop = panel.scrollHeight;
+}
+function esc(s) { return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+// ── polling ──────────────────────────────────────────────────────────────────
+function poll(taskId, onSuccess, onError) {
+  clearInterval(pollTimer);
+  pollTimer = setInterval(async () => {
+    try {
+      const r = await fetch(`/api/task/${taskId}`).then(r => r.json());
+      if (!r.ok) { clearInterval(pollTimer); onError?.(r.error); return; }
+      setLog(r.logs);
+      if (r.status === "done") {
+        clearInterval(pollTimer);
+        onSuccess?.(r.result, r.elapsed);
+      } else if (r.status === "error") {
+        clearInterval(pollTimer);
+        setStatus("任务失败：" + r.result, "err");
+        onError?.(r.result);
+      } else {
+        setStatus(`运行中… ${r.elapsed}s`, "info");
+      }
+    } catch (e) {
+      clearInterval(pollTimer);
+      setStatus("轮询出错: " + e.message, "err");
+    }
+  }, 1200);
+}
+
+// ── export ───────────────────────────────────────────────────────────────────
+async function doExport() {
+  const chatroom = getChatroom();
+  const { date, start, end } = getDates();
+  if (!chatroom) { toast("请选择或输入群名称", true); return; }
+  if (!start && !end) { toast("请选择日期", true); return; }
+
+  setBtnLoading("btnExport", "btnExportIcon", "导出中", true);
+  document.getElementById("btnGenerate").disabled = true;
+  document.getElementById("resultCard").style.display = "none";
+  setStatus("正在导出聊天记录…", "info");
+  setLog([]);
+
+  try {
+    const r = await fetch("/api/export", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chatroom, date, start, end }),
+    }).then(r => r.json());
+
+    if (!r.ok) { setStatus(r.error, "err"); setBtnLoading("btnExport","btnExportIcon","导出聊天记录",false); return; }
+    exportTask = r.task_id;
+
+    poll(r.task_id, (result, elapsed) => {
+      setStatus(`导出完成，用时 ${elapsed}s`, "ok");
+      setBtnLoading("btnExport","btnExportIcon","导出聊天记录",false);
+      document.getElementById("btnGenAi").disabled = false;
+      document.getElementById("btnGenerate").disabled = false;
+    }, () => {
+      setBtnLoading("btnExport","btnExportIcon","导出聊天记录",false);
+    });
+  } catch (e) {
+    setStatus("请求失败: " + e.message, "err");
+    setBtnLoading("btnExport","btnExportIcon","导出聊天记录",false);
+  }
+}
+
+// ── generate ─────────────────────────────────────────────────────────────────
+async function doGenerate() {
+  const chatroom = getChatroom();
+  const { date } = getDates();
+
+  setBtnLoading("btnGenerate","btnGenerateIcon","生成中", true);
+  document.getElementById("resultCard").style.display = "none";
+  setStatus("正在生成日报…", "info");
+
+  try {
+    const r = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task_id: exportTask, chatroom, date }),
+    }).then(r => r.json());
+
+    if (!r.ok) { setStatus(r.error, "err"); setBtnLoading("btnGenerate","btnGenerateIcon","生成日报 HTML + PNG",false); return; }
+
+    poll(r.task_id, (result, elapsed) => {
+      setStatus(`日报生成完成，用时 ${elapsed}s`, "ok");
+      setBtnLoading("btnGenerate","btnGenerateIcon","生成日报 HTML + PNG",false);
+      showResult(result);
+    }, () => {
+      setBtnLoading("btnGenerate","btnGenerateIcon","生成日报 HTML + PNG",false);
+    });
+  } catch (e) {
+    setStatus("请求失败: " + e.message, "err");
+    setBtnLoading("btnGenerate","btnGenerateIcon","生成日报 HTML + PNG",false);
+  }
+}
+
+function showResult(result) {
+  const htmlUrl = `/output/${result.html_file}`;
+  const pngUrl  = `/output/${result.png_file}`;
+  document.getElementById("htmlPreviewBtn").href = htmlUrl;
+  document.getElementById("htmlDownloadBtn").href = htmlUrl;
+  document.getElementById("pngPreviewBtn").href  = pngUrl;
+  document.getElementById("pngDownloadBtn").href = pngUrl;
+  document.getElementById("previewFrame").src    = htmlUrl;
+  document.getElementById("resultCard").style.display = "block";
+  document.getElementById("resultCard").scrollIntoView({ behavior: "smooth", block: "start" });
+  loadHistory();
+}
+
+// ── history ──────────────────────────────────────────────────────────────────
+const KIND_LABEL = { stats: "统计", chat: "文本", raw: "原始", ai: "AI内容", html: "HTML", png: "PNG" };
+
+function fmtSize(bytes) {
+  if (!bytes) return "0 B";
+  const units = ["B", "KB", "MB", "GB"];
+  let i = 0, n = bytes;
+  while (n >= 1024 && i < units.length - 1) { n /= 1024; i++; }
+  return `${n.toFixed(i ? 1 : 0)} ${units[i]}`;
+}
+function fmtTime(ts) {
+  if (!ts) return "—";
+  const d = new Date(ts * 1000);
+  const p = (x) => String(x).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+async function loadHistory() {
+  try {
+    const r = await fetch("/api/history").then(r => r.json());
+    const list  = document.getElementById("historyList");
+    const empty = document.getElementById("historyEmpty");
+    const btnClear = document.getElementById("btnClearAll");
+    if (!r.ok || !r.records.length) {
+      list.innerHTML = ""; empty.style.display = "block";
+      btnClear.disabled = true;
+      return;
+    }
+    empty.style.display = "none";
+    btnClear.disabled = false;
+    list.innerHTML = r.records.map(rec => {
+      const html = rec.files.find(f => f.kind === "html");
+      const png  = rec.files.find(f => f.kind === "png");
+      const totalSize = rec.files.reduce((s, f) => s + (f.size || 0), 0);
+      const tags = rec.files
+        .slice().sort((a, b) => b.size - a.size)
+        .map(f => `<span class="hist-tag ${f.kind}">${KIND_LABEL[f.kind] || f.kind} ${fmtSize(f.size)}</span>`)
+        .join("");
+      const links = [
+        html ? `<a class="hist-link" href="/output/${html.name}" target="_blank">查看日报</a>` : "",
+        png  ? `<a class="hist-link" href="/output/${png.name}" target="_blank">长图</a>` : "",
+      ].join("");
+      const ops = rec.has_stats
+        ? `<button class="hist-op ai" onclick="histRun('ai','${rec.task_id}',this)">生成 AI 内容</button>` +
+          `<button class="hist-op" onclick="histRun('report','${rec.task_id}',this)">生成日报/图</button>`
+        : "";
+      const reportTag = rec.has_report ? `<span class="hist-tag report">已生成日报</span>` : "";
+      return `<div class="hist-row">
+        <div class="hist-main">
+          <span class="hist-id">${esc(rec.task_id)}</span>
+          <span class="hist-meta">
+            <span>${fmtTime(rec.mtime)}</span>${reportTag}
+            <span>共 ${fmtSize(totalSize)}</span>
+            ${tags}
+          </span>
+        </div>
+        <div class="hist-acts">
+          ${links}${ops}
+          <button class="hist-del" onclick="deleteOne('${rec.task_id}')">删除</button>
+        </div>
+      </div>`;
+    }).join("");
+  } catch (e) {
+    // 静默失败，不打断主流程
+  }
+}
+
+async function clearHistory() {
+  if (!confirm("确定清除全部历史记录？将删除所有导出的聊天数据与生成的日报文件，此操作不可恢复。")) return;
+  const btn = document.getElementById("btnClearAll");
+  btn.disabled = true; btn.textContent = "清除中";
+  try {
+    const r = await fetch("/api/clear", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    }).then(r => r.json());
+    if (!r.ok) { toast("清除失败：" + (r.error || "未知错误"), true); return; }
+    toast(`已清除 ${r.removed} 个文件`);
+    // 重置当前会话产物展示
+    document.getElementById("resultCard").style.display = "none";
+    exportTask = null;
+    document.getElementById("btnGenAi").disabled = true;
+    document.getElementById("btnGenerate").disabled = true;
+    loadHistory();
+  } catch (e) {
+    toast("清除失败：" + e.message, true);
+  } finally {
+    btn.disabled = false; btn.textContent = "清除全部";
+  }
+}
+
+async function deleteOne(taskId) {
+  if (!confirm(`确定删除记录 ${taskId} 的所有文件？`)) return;
+  try {
+    const r = await fetch("/api/clear", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task_ids: [taskId] }),
+    }).then(r => r.json());
+    if (!r.ok) { toast("删除失败：" + (r.error || ""), true); return; }
+    if (exportTask === taskId) { exportTask = null; document.getElementById("btnGenerate").disabled = true; }
+    toast("已删除");
+    loadHistory();
+  } catch (e) {
+    toast("删除失败：" + e.message, true);
+  }
+}
+
+// 对某条历史记录直接执行：kind = "ai" | "report"
+function histRun(kind, taskId, btn) {
+  const orig = btn.textContent;
+  const restore = () => { btn.disabled = false; btn.textContent = orig; };
+  btn.disabled = true;
+
+  if (kind === "ai") {
+    if (!aiHasKey && !document.getElementById("aiApiKey").value.trim()) {
+      toast("请先在「AI Agent 配置」填写 API Key", true);
+      document.getElementById("aiConfigBody").style.display = "block";
+      restore();
+      return;
+    }
+    btn.textContent = "AI 生成中…";
+    setStatus(`为记录 ${taskId} 生成 AI 内容…`, "info");
+    fetch("/api/generate-ai", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task_id: taskId }),
+    }).then(r => r.json()).then(r => {
+      if (!r.ok) { setStatus(r.error, "err"); toast(r.error, true); restore(); return; }
+      poll(r.task_id, (_res, elapsed) => {
+        setStatus(`AI 内容已生成（${taskId}），用时 ${elapsed}s，可点「生成日报/图」`, "ok");
+        loadHistory(); restore();
+      }, err => { setStatus("AI 生成失败: " + err, "err"); restore(); });
+    }).catch(e => { setStatus("AI 请求失败: " + e, "err"); restore(); });
+    return;
+  }
+
+  // report：生成日报 HTML + PNG（跨多天的记录会自动按周度模式呈现）
+  btn.textContent = "日报生成中…";
+  setStatus(`为记录 ${taskId} 生成日报与长图…`, "info");
+  fetch("/api/generate", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ task_id: taskId }),
+  }).then(r => r.json()).then(r => {
+    if (!r.ok) { setStatus(r.error, "err"); toast(r.error, true); restore(); return; }
+    poll(r.task_id, (result, elapsed) => {
+      setStatus(`日报已生成（${taskId}），用时 ${elapsed}s`, "ok");
+      showResult(result); restore();
+    }, err => { setStatus("日报生成失败: " + err, "err"); restore(); });
+  }).catch(e => { setStatus("日报请求失败: " + e, "err"); restore(); });
+}
+
+// ── one-click ────────────────────────────────────────────────────────────────
+async function doOneClick() {
+  const chatroom = getChatroom();
+  const { date, start, end } = getDates();
+  if (!chatroom) { toast("请选择或输入群名称", true); return; }
+  if (!start && !end) { toast("请选择日期", true); return; }
+
+  setBtnLoading("btnOne", null, "运行中", true);
+
+  // Step 1: export
+  setStatus("[1/3] 导出聊天记录…", "info");
+  document.getElementById("resultCard").style.display = "none";
+  setLog([]);
+
+  try {
+    const exportRes = await fetch("/api/export", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chatroom, date, start, end }),
+    }).then(r => r.json());
+
+    if (!exportRes.ok) { setStatus(exportRes.error, "err"); setBtnLoading("btnOne",null,"一键全流程",false); return; }
+    exportTask = exportRes.task_id;
+
+    // Wait for export
+    await new Promise((resolve, reject) => {
+      poll(exportRes.task_id, (result, elapsed) => { resolve(result); }, err => reject(err));
+    });
+
+    // Step 2: AI content（仅在已配置 api_key 时执行，失败则跳过不阻断）
+    if (aiHasKey) {
+      setStatus("[2/3] 生成 AI 内容…", "info");
+      try {
+        const aiRes = await fetch("/api/generate-ai", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ task_id: exportTask, chatroom, date }),
+        }).then(r => r.json());
+        if (aiRes.ok) {
+          await new Promise((resolve, reject) => {
+            poll(aiRes.task_id, () => resolve(), err => reject(err));
+          });
+        } else {
+          setStatus("AI 内容跳过：" + aiRes.error + "，继续生成日报", "warn");
+        }
+      } catch (aiErr) {
+        setStatus("AI 内容生成失败，继续生成日报", "warn");
+      }
+    } else {
+      setStatus("[2/3] 未配置 AI 密钥，跳过 AI 内容", "warn");
+    }
+
+    setStatus("[3/3] 生成日报…", "info");
+
+    // Step 3: generate
+    const genRes = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task_id: exportTask, chatroom, date }),
+    }).then(r => r.json());
+
+    if (!genRes.ok) { setStatus(genRes.error, "err"); setBtnLoading("btnOne",null,"一键全流程",false); return; }
+
+    await new Promise((resolve, reject) => {
+      poll(genRes.task_id, (result, elapsed) => {
+        setStatus(`全部完成，用时 ${elapsed}s`, "ok");
+        showResult(result);
+        resolve();
+      }, err => reject(err));
+    });
+
+  } catch (e) {
+    setStatus("流程失败: " + e, "err");
+  } finally {
+    setBtnLoading("btnOne", null, "一键全流程", false);
+  }
+}
+
+// ── AI agent config ──────────────────────────────────────────────────────────
+let aiHasKey = false;
+
+function toggleAiConfig() {
+  const body = document.getElementById("aiConfigBody");
+  const caret = document.getElementById("aiConfigCaret");
+  const open = body.style.display === "none";
+  body.style.display = open ? "block" : "none";
+  caret.style.transform = open ? "rotate(180deg)" : "";
+}
+
+async function loadAiConfig() {
+  try {
+    const r = await fetch("/api/ai-config").then(r => r.json());
+    if (!r.ok) return;
+    const c = r.config || {};
+    document.getElementById("aiBaseUrl").value      = c.base_url || "";
+    document.getElementById("aiModel").value        = c.model || "";
+    document.getElementById("aiTemperature").value  = c.temperature != null ? c.temperature : "";
+    document.getElementById("aiJsonMode").checked   = !!c.json_mode;
+    document.getElementById("aiSkipSsl").checked    = c.verify_ssl === false;
+    aiHasKey = !!r.has_api_key;
+    const status = document.getElementById("aiConfigStatus");
+    if (aiHasKey) {
+      status.textContent = `已配置 · ${c.model || ""}`;
+      status.classList.add("ok");
+      document.getElementById("aiKeyHint").textContent = `已保存：${r.api_key_masked}`;
+    } else {
+      status.textContent = "未配置密钥";
+      status.classList.remove("ok");
+    }
+  } catch (e) { /* 忽略 */ }
+}
+
+async function saveAiConfig() {
+  const btn = document.getElementById("btnSaveAi");
+  const config = {
+    base_url: document.getElementById("aiBaseUrl").value.trim(),
+    model: document.getElementById("aiModel").value.trim(),
+    json_mode: document.getElementById("aiJsonMode").checked,
+    verify_ssl: !document.getElementById("aiSkipSsl").checked,
+  };
+  const tempRaw = document.getElementById("aiTemperature").value.trim();
+  if (tempRaw !== "") config.temperature = parseFloat(tempRaw);
+  const apiKey = document.getElementById("aiApiKey").value.trim();
+
+  if (!config.base_url || !config.model) { toast("Base URL 和 Model 不能为空", true); return; }
+
+  setBtnLoading("btnSaveAi", null, "保存中", true);
+  try {
+    const r = await fetch("/api/ai-config", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ config, api_key: apiKey }),
+    }).then(r => r.json());
+    if (!r.ok) { toast("保存失败：" + (r.error || ""), true); return; }
+    document.getElementById("aiApiKey").value = "";
+    toast("配置已保存");
+    loadAiConfig();
+  } catch (e) {
+    toast("保存失败：" + e.message, true);
+  } finally {
+    setBtnLoading("btnSaveAi", null, "保存配置", false);
+  }
+}
+
+async function doGenerateAi() {
+  const chatroom = getChatroom();
+  const { date } = getDates();
+  if (!exportTask) { toast("请先导出聊天记录", true); return; }
+  if (!aiHasKey && !document.getElementById("aiApiKey").value.trim()) {
+    toast("请先在「AI Agent 配置」填写 API Key", true);
+    document.getElementById("aiConfigBody").style.display = "block";
+    return;
+  }
+
+  setBtnLoading("btnGenAi", "btnGenAiIcon", "AI 生成中", true);
+  setStatus("正在调用 AI Agent 生成内容…", "info");
+
+  try {
+    const r = await fetch("/api/generate-ai", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task_id: exportTask, chatroom, date }),
+    }).then(r => r.json());
+
+    if (!r.ok) { setStatus(r.error, "err"); setBtnLoading("btnGenAi","btnGenAiIcon","生成 AI 内容",false); return; }
+
+    poll(r.task_id, (result, elapsed) => {
+      setStatus(`AI 内容生成完成，用时 ${elapsed}s。现在可生成日报`, "ok");
+      setBtnLoading("btnGenAi","btnGenAiIcon","生成 AI 内容",false);
+      document.getElementById("btnGenerate").disabled = false;
+      loadAiConfig();
+    }, () => {
+      setBtnLoading("btnGenAi","btnGenAiIcon","生成 AI 内容",false);
+    });
+  } catch (e) {
+    setStatus("请求失败: " + e.message, "err");
+    setBtnLoading("btnGenAi","btnGenAiIcon","生成 AI 内容",false);
+  }
+}
+
+// ── UI helpers ───────────────────────────────────────────────────────────────
+function setBtnLoading(btnId, iconId, label, loading) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = loading;
+  if (loading) {
+    btn.dataset.origHtml = btn.innerHTML;
+    btn.innerHTML = `<span class="spin"></span> ${label}`;
+  } else {
+    btn.innerHTML = btn.dataset.origHtml || label;
+  }
+}
+
+function reloadPreview() {
+  const f = document.getElementById("previewFrame");
+  f.src = f.src;
+}
+function togglePreview() {
+  const f = document.getElementById("previewFrame");
+  const btn = document.getElementById("btnTogglePv");
+  previewVisible = !previewVisible;
+  f.style.display = previewVisible ? "block" : "none";
+  btn.textContent = previewVisible ? "收起" : "展开";
+}
+
+function toast(msg, isError) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.style.background = isError ? "#dc2626" : "#1a1f2e";
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2800);
+}
+
+// 页面加载时自动尝试加载群列表、历史记录与 AI 配置
+window.addEventListener("load", () => {
+  const btn = document.getElementById("btnLoadGroups");
+  btn.click();
+  loadHistory();
+  loadAiConfig();
+});
+</script>
+</body>
+</html>

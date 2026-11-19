@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "provider": "openai-compatible",
+  "base_url": "https://llm-v3ryl0dq6zvtw0ph.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+  "model": "glm-5.3",
+  "api_key": "sk-5fd48d8b6b6943f8b3b17699fd08d76b",
+  "temperature": 0.6,
+  "max_tokens": 8000,
+  "timeout": 180,
+  "json_mode": false,
+  "max_chat_chars": 120000,
+  "verify_ssl": true,
+  "_comment": "复制本文件为 ai_agent.json 并填写 api_key。也可用环境变量覆盖：WECHAT_AI_BASE_URL / WECHAT_AI_MODEL / WECHAT_AI_API_KEY（兼容 OPENAI_API_KEY）。任何 OpenAI 兼容端点均可，例如 DeepSeek: base_url=https://api.deepseek.com/v1 model=deepseek-chat；本地 Ollama: base_url=http://localhost:11434/v1 model=qwen2.5（api_key 随便填）。macOS 上若报 SSL 证书错误请先 pip install certifi；仍不行可将 verify_ssl 设为 false 临时跳过校验。"
+}

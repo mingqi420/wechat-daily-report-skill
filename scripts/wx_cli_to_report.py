@@ -169,8 +169,10 @@ def run_cli(args):
     if not args.chatroom:
         raise RuntimeError("调用 CLI 时必须提供 --chatroom")
 
-    start = args.start or args.date
-    end = args.end or args.date
+    # wx-cli/wechat-cli 通常只支持按天粗过滤，这里只传日期部分；
+    # 精确到秒的过滤交给 filter_messages_by_range 在本地二次裁剪。
+    start = (args.start or args.date or "")[:10] or None
+    end = (args.end or args.date or "")[:10] or None
 
     if cli == "wx":
         cmd = [executable, "history", args.chatroom, "-n", str(args.limit), "--json"]
@@ -758,6 +760,50 @@ def normalize_messages(messages, default_date=None, source_data=None):
     return normalized
 
 
+def normalize_range_bound(text, is_end=False):
+    """把 'YYYY-MM-DD[ T]HH:MM[:SS]' 解析为 datetime。
+
+    - 纯日期：起始补 00:00:00，结束补 23:59:59，避免误裁剪当天消息。
+    - 到分钟：秒补 00（起始）/ 59（结束）。
+    """
+    if not text:
+        return None
+    text = str(text).strip().replace("T", " ")
+    if not text:
+        return None
+    date_part = text[:10]
+    time_part = text[11:].strip()
+    if not time_part:
+        suffix = "23:59:59" if is_end else "00:00:00"
+        return parse_time_value(f"{date_part} {suffix}")
+    if len(time_part) == 5:
+        time_part = time_part + (":59" if is_end else ":00")
+    parsed = parse_time_value(f"{date_part} {time_part}")
+    if parsed is None:
+        parsed = parse_time_value(f"{date_part} {'23:59:59' if is_end else '00:00:00'}")
+    return parsed
+
+
+def filter_messages_by_range(messages, start=None, end=None):
+    """按精确到秒的时间范围裁剪（在 CLI 按天粗取之后做精过滤）。"""
+    start_dt = normalize_range_bound(start, is_end=False)
+    end_dt = normalize_range_bound(end, is_end=True)
+    if not start_dt and not end_dt:
+        return messages, None, None
+    kept = []
+    for m in messages:
+        when = m.get("dt")
+        if when is None:
+            kept.append(m)
+            continue
+        if start_dt and when < start_dt:
+            continue
+        if end_dt and when > end_dt:
+            continue
+        kept.append(m)
+    return kept, start_dt, end_dt
+
+
 def validate_group_sender_identity(source_data, messages, allow_unstable=False):
     """Stop before producing a report when a group source has no stable IDs."""
     is_group = isinstance(source_data, dict) and (
@@ -942,6 +988,15 @@ def main():
             date_str = date_str[:10]
 
         messages = normalize_messages(messages_raw, date_str or None, meta)
+
+        messages, range_start, range_end = filter_messages_by_range(
+            messages, args.start or args.date, args.end or args.date
+        )
+        dropped = len(messages_raw) - len(messages)
+        if range_start or range_end:
+            rs = range_start.strftime("%Y-%m-%d %H:%M:%S") if range_start else "-"
+            re_ = range_end.strftime("%Y-%m-%d %H:%M:%S") if range_end else "-"
+            print(f"Time-range filter [{rs} ~ {re_}]: kept {len(messages)}, dropped {dropped} message(s)")
 
         identity_warning = validate_group_sender_identity(
             meta,
