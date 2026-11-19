@@ -179,6 +179,8 @@ python3 web/app.py
 
 浏览器打开 `http://127.0.0.1:8765`。
 
+![Web 控制台截图](assets/screenshots/web-console.png)
+
 能做的事：
 
 | 功能 | 说明 |
@@ -345,6 +347,17 @@ python3 scripts/generate_report.py \
   --device-scale-factor 2
 ```
 
+## 常见问题 / FAQ
+
+| 现象 | 处理 |
+| --- | --- |
+| 页面打不开 / 端口被占 | 确认 `python3 web/app.py` 在运行；排查：`lsof -nP -iTCP:8765 -sTCP:LISTEN`，结束旧进程后重启 |
+| AI 生成报 `CERTIFICATE_VERIFY_FAILED` | macOS 上 Python 缺 CA 证书，先 `pip install certifi`（已在 requirements 中）；仍不行可在页面勾选「跳过 SSL 校验」或命令行加 `--insecure` |
+| AI 生成报「缺少 api_key」 | 在页面「AI Agent 配置」保存密钥，或 `cp config/ai_agent.example.json config/ai_agent.json` 后填写 |
+| 群列表加载失败 | 先完成 wx-cli 初始化（见上方安装章节），确认 `wx sessions` 在终端能正常输出 |
+| PNG 长图生成失败 | 执行过 `python3 -m playwright install chromium`；生成耗时较长，页面会持续显示运行日志 |
+| 导出结果为空 | 确认群名与微信内显示一致（支持群 ID）；检查日期范围是否真的有过消息，时分秒开关是否把区间卡得太窄 |
+
 ## 放进 Obsidian
 
 推荐目录：
@@ -376,6 +389,8 @@ web/app.py                       # Flask Web 控制台（导出/AI/日报/历史
 web/templates/index.html         # 控制台单页前端
 config/ai_agent.example.json     # AI Agent 配置模板（复制为 ai_agent.json 使用）
 assets/report_template.html      # 新版日报 UI 模板
+assets/contact/                  # 公众号与个人微信二维码
+assets/screenshots/              # Web 控制台界面截图
 scripts/wx_cli_to_report.py      # wx-cli/wechat-cli 转日报输入（支持秒级精过滤）
 scripts/generate_ai_content.py   # 调用 AI Agent 自动生成 ai_content.json
 scripts/analyze_chat.py          # 从本地微信数据生成 stats/simplified_chat
@@ -402,11 +417,24 @@ MIT
 
 ## 联系我 / Contact
 
-想交流 AI 工具、内容自动化、SEO、私域增长或项目合作，可以扫码加我微信。
+想交流 AI 工具、内容自动化、社群运营或项目合作，欢迎扫码联系。
 
-For collaboration on AI tools, content automation, SEO, private-domain growth, or product experiments, scan the WeChat QR code below.
+For collaboration on AI tools, content automation, community operations, or product experiments, scan the QR codes below.
 
-<img src="https://raw.githubusercontent.com/siuserxiaowei/siuserxiaowei/main/assets/contact/wechat-qrcode.jpg" width="180" alt="WeChat QR code / 微信二维码" />
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <b>微信公众号</b><br/>
+      使用技巧 · 更新动态 · 实战案例<br/><br/>
+      <img src="assets/contact/wechat-mp-qrcode.jpg" width="200" alt="微信公众号二维码 / WeChat Official Account QR code" />
+    </td>
+    <td align="center" width="50%">
+      <b>个人微信</b><br/>
+      扫码加我为朋友，交流项目与合作<br/><br/>
+      <img src="assets/contact/wechat-personal-qrcode.jpg" width="200" alt="个人微信二维码 / Personal WeChat QR code" />
+    </td>
+  </tr>
+</table>
 
 **关键词 / Keywords**: WeChat daily report, community operations, AI summary, local data, AI tools, AI automation, GitHub Pages, SEO
 
